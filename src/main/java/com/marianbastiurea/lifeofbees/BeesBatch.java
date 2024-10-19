@@ -1,13 +1,13 @@
 package com.marianbastiurea.lifeofbees;
 
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class BeesBatch {
     private int numberOfBees;
-    private final Date creationDate;
+    private final LocalDate creationDate;
 
-    public BeesBatch(int numberOfBees, Date creationDate) {
+    public BeesBatch(int numberOfBees, LocalDate creationDate) {
         this.numberOfBees = numberOfBees;
         this.creationDate = creationDate;
     }
@@ -20,7 +20,7 @@ public class BeesBatch {
         this.numberOfBees = numberOfBees;
     }
 
-    public Date getCreationDate() {
+    public LocalDate getCreationDate() {
         return creationDate;
     }
 

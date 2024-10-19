@@ -21,7 +21,7 @@ public class LifeOfBeesFactory {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM", Locale.ENGLISH);
         int day = date.getDayOfMonth();
         HarvestingMonths month = getHarvestingMonth(date);
-
+        List<ActionOfTheWeek> actionOfTheWeek = new ArrayList<>();
         Whether whether = new Whether();
         Whether todayWeather = whether.whetherToday(month, day);
         double speedWind = todayWeather.getSpeedWind();
@@ -29,30 +29,27 @@ public class LifeOfBeesFactory {
         double precipitation = todayWeather.getPrecipitation();
 
         double moneyInTheBank = 3000;
+        double totalKgOfHoney = 0;
         List<Hive> hives = new ArrayList<>();
         Honey honey = new Honey();
         String honeyType = honey.honeyType(month, day);
 
-        Action action = new Action();
-        String actionOfTheWeek = action.actionType(month, day);
 
+        double kgOfHoney = 0;
         Random random = new Random();
         Apiary apiary = new Apiary(hives, new ArrayList<>());
 
         for (int i = 1; i < numberOfStartingHives + 1; i++) {
             int ageOfQueen = random.nextInt(1, 6);
             List<EggFrame> eggFrames = new ArrayList<>();
-            for (int j = 0; j < random.nextInt(5, 6); j++) {
-                eggFrames.add(new EggFrame());
-            }
-            List<HoneyFrame> honeyFrames = new ArrayList<>();
-            double kgOfHoney = 0;
-            for (int k = 0; k < random.nextInt(3, 4); k++) {
+            //   for (int j = 0; j < random.nextInt(5, 6); j++) {
+            //for (int j = 0; j < 2; j++) {
+            eggFrames.add(new EggFrame());
+            //}
+           List<HoneyFrame> honeyFrames = new ArrayList<>();
+//            for (int k = 0; k < random.nextInt(3, 4); k++) {
                 honeyFrames.add(new HoneyFrame(random.nextDouble(2.5, 3), honeyType));
-            }
-            for (HoneyFrame honeyFrame : honeyFrames) {
-                kgOfHoney += honeyFrame.getKgOfHoney();
-            }
+            //}
 
             int numberOfBees = random.nextInt(2000, 2500) * (honeyFrames.size() + eggFrames.size());
             Hive hive = new Hive(apiary,
@@ -70,8 +67,7 @@ public class LifeOfBeesFactory {
                     kgOfHoney);
             hives.add(hive);
         }
-
-        return new LifeOfBees(apiary, gameId, gameName, location, currentDate, speedWind, temperature, precipitation, actionOfTheWeek, moneyInTheBank);
+        return new LifeOfBees(apiary, gameId, gameName, location, currentDate, speedWind, temperature, precipitation, moneyInTheBank, totalKgOfHoney, actionOfTheWeek);
     }
 
     public String serializeGameResponses(List<GameResponse> gameResponses) {

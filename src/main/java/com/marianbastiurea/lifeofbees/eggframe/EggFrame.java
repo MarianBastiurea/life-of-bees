@@ -3,9 +3,10 @@ package com.marianbastiurea.lifeofbees.eggframe;
 
 import com.marianbastiurea.lifeofbees.BeesBatch;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Date;
 import java.util.*;
 
 public class EggFrame {
@@ -34,7 +35,7 @@ public class EggFrame {
                 '}' + "\n";
     }
 
-    public void addEggs(int numberOfEggs, Date date) {
+    public void addEggs(int numberOfEggs, LocalDate date) {
         //  maxEggPerFrame is 6400. A frame have around 8500 cells. 75% more or less are used by the queen to lay eggs.
         // Remaining cells are fill up with honey or are damaged
 
@@ -44,15 +45,14 @@ public class EggFrame {
         }
     }
 
-    public List<BeesBatch> checkAndHatchEggs(Date currentDate) {
+    public List<BeesBatch> checkAndHatchEggs(LocalDate currentDate) {
         List<BeesBatch> hatchedBatches = new ArrayList<>();
         Iterator<EggBatch> iterator = eggBatches.iterator();
 
         while (iterator.hasNext()) {
             EggBatch eggBatch = iterator.next();
-            Date creationDate = eggBatch.getCreationDate();
-            long differenceInMillisecond = Math.abs(currentDate.getTime() - creationDate.getTime());
-            long differenceInDays = differenceInMillisecond / (24 * 60 * 60 * 1000);
+            LocalDate creationDate = eggBatch.getCreationDate();
+            long differenceInDays = ChronoUnit.DAYS.between(creationDate, currentDate);
 
             if (differenceInDays > 21) {
                 hatchedBatches.add(new BeesBatch(eggBatch.getNumberOfEggs(), currentDate));

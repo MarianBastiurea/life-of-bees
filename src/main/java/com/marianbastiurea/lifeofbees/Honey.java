@@ -33,8 +33,12 @@ public class Honey {
 
     public static HarvestingMonths getHarvestingMonth(LocalDate date) {
         int monthValue = date.getMonthValue();
-        return HarvestingMonths.values()[monthValue - 1];
+        if (monthValue < 3 || monthValue > 9) {
+            throw new IllegalArgumentException("Luna nu este în intervalul de recoltare (martie-septembrie).");
+        }
+        return HarvestingMonths.values()[monthValue - 3];  // Martie corespunde indexului 0
     }
+
 
     public String honeyType(HarvestingMonths month, int dayOfMonth) {
         switch (month) {
@@ -83,10 +87,10 @@ public class Honey {
         };
     }
 
-    public List<HoneyBatch> makeHoneyBatch(Hive hive, Date currentDate) {
+    public List<HoneyBatch> makeHoneyBatch(Hive hive, LocalDate currentDate) {
         List<HoneyBatch> honeyBatches = new ArrayList<>();
 
-        double totalKgOfHoneyPerHive = 0;
+        double kgOfHoney = 0;
         int frameCounter = 0;
 
         if (hive.isAnswerIfWantToSplit() && hive.checkIfAll6EggsFrameAre80PercentFull()) {
@@ -94,16 +98,15 @@ public class Honey {
             for (HoneyFrame honeyFrame : hiveHoneyFrames) {
                 if (honeyFrame.getKgOfHoney() > 3) {
                     frameCounter++;
-                    totalKgOfHoneyPerHive += honeyFrame.getKgOfHoney();
+                    kgOfHoney += honeyFrame.getKgOfHoney();
                     honeyFrame.setKgOfHoney(0);
                 }
             }
 
-            if (totalKgOfHoneyPerHive > 0) {
-                HoneyBatch honeyBatch = new HoneyBatch(hive.getId(), currentDate, totalKgOfHoneyPerHive,
+            if (kgOfHoney > 0) {
+                HoneyBatch honeyBatch = new HoneyBatch(hive.getId(), currentDate, kgOfHoney,
                         getHoneyType(), frameCounter);
                 honeyBatches.add(honeyBatch);
-                // System.out.println("Honey Batch are:" + honeyBatch);
             }
         }
         return honeyBatches;

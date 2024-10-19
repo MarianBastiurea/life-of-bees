@@ -56,6 +56,16 @@ public class Apiary {
                 '}';
     }
 
+
+    public Hive getHiveById(Integer hiveId) {
+        for (Hive hive : hives) {
+            if (hive.getId() == hiveId){
+                return hive;
+            }
+        }
+        return null;  // Dacă nu găsește stupul, returnează null
+    }
+
     public void splitHive(Hive hive) {
 
         /*
@@ -114,8 +124,7 @@ public class Apiary {
 
         hives.addAll(newHives);
     }
-
-    public void honeyHarvestedByHoneyType() {
+    public double honeyHarvestedByHoneyType() {
         List<HarvestedHoney> rapeseedHoney = new ArrayList<>();
         List<HarvestedHoney> acaciaHoney = new ArrayList<>();
         List<HarvestedHoney> wildFlowerHoney = new ArrayList<>();
@@ -128,6 +137,7 @@ public class Apiary {
         double annualKgOfWildFlowerHoney = 0;
         double annualKgOfSunflowerHoney = 0;
         double annualKgOfFalseIndigoHoney = 0;
+        double totalKgOfHoney = 0;
 
         for (Hive hive : hives) {
             List<HoneyBatch> hiveHoneyBatches = hive.getHoneyBatches();
@@ -146,7 +156,6 @@ public class Apiary {
                         break;
                     case "Rapeseed":
                         rapeseedHoney.add(harvestedHoney);
-
                         annualKgOfRapeseedHoney += harvestedHoney.getKgOfHoney();
                         break;
                     case "WildFlower":
@@ -167,34 +176,47 @@ public class Apiary {
                         break;
                     default:
                         break;
-
                 }
             }
-            if (!acaciaHoney.isEmpty()) {
-                System.out.println("Acacia Honey: " + acaciaHoney);
-                System.out.println("annual quantity of acacia honey is: " + annualKgOfAcaciaHoney);
-            }
-            if (!rapeseedHoney.isEmpty()) {
-                System.out.println("Rapeseed Honey: " + rapeseedHoney);
-                System.out.println("Annual quantity of rapeseed Honey: " + annualKgOfRapeseedHoney);
-            }
-            if (!wildFlowerHoney.isEmpty()) {
-                System.out.println("WildFlower Honey: " + wildFlowerHoney);
-                System.out.println("Annual quantity of wildflower Honey: " + annualKgOfWildFlowerHoney);
-            }
-            if (!lindenHoney.isEmpty()) {
-                System.out.println("Linden Honey: " + lindenHoney);
-                System.out.println("Annual quantity of linden Honey: " + annualKgOfLindenHoney);
-            }
-            if (!sunflowerHoney.isEmpty()) {
-                System.out.println("SunFlower Honey: " + sunflowerHoney);
-                System.out.println("Annual quantity of sunflower Honey: " + annualKgOfSunflowerHoney);
-            }
-            if (!falseIndigoHoney.isEmpty()) {
-                System.out.println("FalseIndigo Honey: " + falseIndigoHoney);
-            }
         }
+
+        // Calculează totalul de kg de miere culeasă pe parcursul sezonului
+        totalKgOfHoney = annualKgOfAcaciaHoney + annualKgOfRapeseedHoney + annualKgOfWildFlowerHoney +
+                annualKgOfLindenHoney + annualKgOfSunflowerHoney + annualKgOfFalseIndigoHoney;
+
+        // Afișează detaliile pentru fiecare tip de miere
+        if (!acaciaHoney.isEmpty()) {
+            System.out.println("Acacia Honey: " + acaciaHoney);
+            System.out.println("Annual quantity of acacia honey is: " + annualKgOfAcaciaHoney);
+        }
+        if (!rapeseedHoney.isEmpty()) {
+            System.out.println("Rapeseed Honey: " + rapeseedHoney);
+            System.out.println("Annual quantity of rapeseed Honey: " + annualKgOfRapeseedHoney);
+        }
+        if (!wildFlowerHoney.isEmpty()) {
+            System.out.println("WildFlower Honey: " + wildFlowerHoney);
+            System.out.println("Annual quantity of wildflower Honey: " + annualKgOfWildFlowerHoney);
+        }
+        if (!lindenHoney.isEmpty()) {
+            System.out.println("Linden Honey: " + lindenHoney);
+            System.out.println("Annual quantity of linden Honey: " + annualKgOfLindenHoney);
+        }
+        if (!sunflowerHoney.isEmpty()) {
+            System.out.println("SunFlower Honey: " + sunflowerHoney);
+            System.out.println("Annual quantity of sunflower Honey: " + annualKgOfSunflowerHoney);
+        }
+        if (!falseIndigoHoney.isEmpty()) {
+            System.out.println("FalseIndigo Honey: " + falseIndigoHoney);
+            System.out.println("Annual quantity of false indigo Honey: " + annualKgOfFalseIndigoHoney);
+        }
+
+        // Afișează totalul de miere culeasă
+        System.out.println("Total quantity of honey harvested during the season: " + totalKgOfHoney + " kg");
+
+        // Returnează totalul de miere culeasă
+        return totalKgOfHoney;
     }
+
 
     public void hibernate(Hive hive) {
         hive.getQueen().setAgeOfQueen(hive.getQueen().getAgeOfQueen() + 1);

@@ -1,15 +1,16 @@
 package com.marianbastiurea.lifeofbees;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class HarvestedHoney {
     private int hiveId;
     private String honeyType;
     private double kgOfHoney;
-    private final Date date;
+    private final LocalDate date;
 
     public HarvestedHoney(int hiveId,
-                          String honeyType, double kgOfHoney, Date date) {
+                          String honeyType, double kgOfHoney, LocalDate date) {
 
         this.hiveId = hiveId;
         this.honeyType = honeyType;
@@ -43,7 +44,7 @@ public class HarvestedHoney {
         this.kgOfHoney = kgOfHoney;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 

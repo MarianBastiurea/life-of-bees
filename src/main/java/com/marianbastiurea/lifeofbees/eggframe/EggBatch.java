@@ -1,14 +1,15 @@
 package com.marianbastiurea.lifeofbees.eggframe;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 
 class EggBatch {
     private int numberOfEggs;
-    private final Date creationDate;
+    private final LocalDate creationDate;
 
 
-    EggBatch(int numberOfEggs, Date creationDate) {
+    EggBatch(int numberOfEggs, LocalDate creationDate) {
         this.numberOfEggs = numberOfEggs;
         this.creationDate = creationDate;
     }
@@ -17,7 +18,7 @@ class EggBatch {
         return numberOfEggs;
     }
 
-    Date getCreationDate() {
+    LocalDate getCreationDate() {
         return creationDate;
     }
 

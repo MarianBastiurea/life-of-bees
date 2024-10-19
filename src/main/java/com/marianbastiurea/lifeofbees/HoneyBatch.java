@@ -1,15 +1,16 @@
 package com.marianbastiurea.lifeofbees;
+import java.time.LocalDate;
 import java.util.Date;
 
 
 class HoneyBatch {
     private final int hiveId;
-    private final  Date creationDate;
+    private final LocalDate creationDate;
     private final double kgOfHoney;
     private final String  honeyType;
     private final int frameCounter;
 
-    public HoneyBatch(int hiveId, Date creationDate, double kgOfHoney, String honeyType, int frameCounter) {
+    public HoneyBatch(int hiveId, LocalDate creationDate, double kgOfHoney, String honeyType, int frameCounter) {
         this.hiveId = hiveId;
         this.creationDate = creationDate;
         this.kgOfHoney = kgOfHoney;
@@ -21,7 +22,7 @@ class HoneyBatch {
         return hiveId;
     }
 
-    public Date getCreationDate() {
+    public LocalDate getCreationDate() {
         return creationDate;
     }
 

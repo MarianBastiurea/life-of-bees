@@ -12,13 +12,42 @@ export const createGame = async (gameData) => {
 
 export const getGame = async () => {
     try {
-        const response = await axios.get('http://localhost:8080/api/bees/game/0'); 
+        const response = await axios.get('http://localhost:8080/api/bees/game/0');
         return response.data;
     } catch (error) {
         console.error('Error fetching game data:', error);
         throw error;
     }
 };
+
+export const iterateWeek = async () => {
+    try {
+        const response = await axios.post('http://localhost:8080/api/bees/iterate/0');
+        if (response.status !== 200) {
+            throw new Error('Failed to iterate week, status: ' + response.status);
+        }
+        return response.data;
+    } catch (error) {
+        console.error('Error iterating week:', error);
+        throw error;
+    }
+};
+
+export const submitActionsOfTheWeek = async (actionsData) => {
+    try {
+        const response = await axios.post('http://localhost:8080/api/bees/submitActionsOfTheWeek/0', actionsData);
+        if (response.status !== 200) {
+            throw new Error('Failed to submit actions, status: ' + response.status);
+        }
+        return response.data;
+    } catch (error) {
+        console.error('Error submitting actions:', error);
+        throw error;
+    }
+};
+
+
+
 
 export const getHoneyQuantities = async () => {
     const response = await fetch('http://localhost:8080/api/bees/honey-quantities', {
@@ -31,16 +60,6 @@ export const getHoneyQuantities = async () => {
         throw new Error('Failed to fetch honey quantities');
     }
     return await response.json();
-};
-
-export const iterateWeek = async () => {
-    try {
-        const response = await axios.post('http://localhost:8080/api/bees/iterate');
-        return response.data;
-    } catch (error) {
-        console.error('Error iterating week:', error);
-        throw error;
-    }
 };
 
 export const getGameInfos = [

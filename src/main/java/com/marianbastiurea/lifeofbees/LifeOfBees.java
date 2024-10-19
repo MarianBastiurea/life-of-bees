@@ -1,14 +1,17 @@
 package com.marianbastiurea.lifeofbees;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.Date;
 import java.util.List;
+
+import static com.marianbastiurea.lifeofbees.Honey.getHarvestingMonth;
 
 
 public class LifeOfBees {
     private Apiary apiary;// apiary is the place where it will be stored all hives
     private int hiveIdCounter = 1;
-    private Action action;
+    private List<ActionOfTheWeek> actionOfTheWeek;
     private Integer gameId;
     private String gameName;
     private String location;
@@ -17,28 +20,24 @@ public class LifeOfBees {
     private int numberOfStartingHives;
     private double speedWind;// in km/h
     private double temperature;// in Celsius Degree
-    private double   precipitation;
-    private  String actionOfTheWeek;
+    private double precipitation;
     private double moneyInTheBank;
+    private double totalKgOfHoney;
 
-    public LifeOfBees(Apiary apiary, Integer gameId, String gameName, String location,String currentDate, double speedWind, double temperature, double precipitation, String actionOfTheWeek, double moneyInTheBank) {
+    public LifeOfBees(Apiary apiary,Integer gameId,
+                      String gameName, String location,  String currentDate,
+                       double speedWind, double temperature, double precipitation, double moneyInTheBank, double totalKgOfHoney,List<ActionOfTheWeek> actionOfTheWeek) {
         this.apiary = apiary;
         this.gameId = gameId;
         this.gameName = gameName;
         this.location = location;
-        this.currentDate=currentDate;
+        this.currentDate = currentDate;
         this.speedWind = speedWind;
         this.temperature = temperature;
         this.precipitation = precipitation;
         this.moneyInTheBank = moneyInTheBank;
-        this.action = new Action();
-
-        String[] dateParts = currentDate.split("-");
-        int month = Integer.parseInt(dateParts[1]);
-        int dayOfMonth = Integer.parseInt(dateParts[2]);
-
-        HarvestingMonths harvestingMonth = HarvestingMonths.values()[month - 1];
-        this.actionOfTheWeek = this.action.actionType(harvestingMonth, dayOfMonth);
+        this.totalKgOfHoney = totalKgOfHoney;
+        this.actionOfTheWeek = actionOfTheWeek;
     }
 
     @Override
@@ -46,7 +45,7 @@ public class LifeOfBees {
         return "LifeOfBees{" +
                 "apiary=" + apiary +
                 ", hiveIdCounter=" + hiveIdCounter +
-                ", action=" + action +
+                ", action=" + actionOfTheWeek +
                 ", gameId=" + gameId +
                 ", gameName='" + gameName + '\'' +
                 ", location='" + location + '\'' +
@@ -57,75 +56,132 @@ public class LifeOfBees {
                 ", precipitation=" + precipitation +
                 ", actionOfTheWeek='" + actionOfTheWeek + '\'' +
                 ", moneyInTheBank=" + moneyInTheBank +
+                ", totalKgOfHoney=" + totalKgOfHoney +
                 '}';
     }
 
-    // Method to iterate over 2 years and execute daily operations
-    public void iterateOneWeek(IWeather whether) {
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) - 1); // Set the calendar to one year ago
-        calendar.set(Calendar.MONTH, Calendar.MARCH); // Start the year on March 1st
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        System.out.println("apiary at beginning of game is: " + apiary);
-        // Iterate over 2 years
-        for (int year = 0; year < 2; year++) {
-            while (calendar.get(Calendar.MONTH) != Calendar.OCTOBER) {
-                // Iterate until OCTOBER
-                Date currentDate = calendar.getTime();
-                System.out.println("Date: " + currentDate);
-                // Extract day of month and month from the calendar
-                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-                int monthValue = calendar.get(Calendar.MONTH);
-                HarvestingMonths harvestingMonth = HarvestingMonths.values()[monthValue];
 
 
-                List<Hive> hives = apiary.getHives();
-                apiary.setNumberOfHives(apiary.getHives().size());
+    public LifeOfBees iterateOneWeek(LifeOfBees lifeOfBeesGame) {
+        LocalDate date = LocalDate.parse(lifeOfBeesGame.getCurrentDate());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM", Locale.ENGLISH);
+        HarvestingMonths month = getHarvestingMonth(date);
+        Whether whether = new Whether();
 
-                ArrayList<Hive> oldHives = new ArrayList<>(hives);
-                for (Hive hive : oldHives) {
-                    Queen queen = hive.getQueen();
-                    hive.getHoney().honeyType(harvestingMonth, dayOfMonth);
-                    double numberRandom = Math.random();
-                    if (numberRandom < 0.5 && harvestingMonth.equals(HarvestingMonths.MAY) && dayOfMonth > 1 && dayOfMonth < 20 || queen.getAgeOfQueen() == 5) {
-                        hive.changeQueen();
-                    }
-                    Honey honey = hive.getHoney();
+        List<ActionOfTheWeek> actionsOfTheWeek = new ArrayList<>();
 
-                    double whetherIndex = whether.whetherIndex(harvestingMonth, dayOfMonth);
+        Whether todayWeather = null;
+        for (int dailyIterator = 0; dailyIterator < 7; dailyIterator++) {
+            todayWeather = whether.whetherToday(month, date.getDayOfMonth());
+            List<Hive> hives = apiary.getHives();
+            apiary.setNumberOfHives(hives.size());
+            ArrayList<Hive> oldHives = new ArrayList<>(hives);
+            List<Integer> hiveIds = new ArrayList<>();
+            for (Hive hive : oldHives) {
+                Queen queen = hive.getQueen();
+                hive.getHoney().honeyType(month, date.getDayOfMonth());
+                double numberRandom = Math.random();
 
-                    int numberOfEggs = queen.makeEggs(honey, whetherIndex);
-                    hive.fillUpEggsFrame(currentDate, numberOfEggs);
-                    hive.addNewEggsFrameInHive(year);
-                    hive.moveAnEggsFrameFromUnsplitHiveToASplitOne();
-                    hive.checkAndAddEggsToBees(currentDate);
-                    hive.fillUpExistingHoneyFrameFromHive(currentDate);
-                    hive.addNewHoneyFrameInHive();
-                    hive.addHoneyBatches(honey.makeHoneyBatch(hive, currentDate));
-                    hive.beesDie(currentDate);
-
-
-                    System.out.println();
+                if ((numberRandom < 0.5 && month.equals(HarvestingMonths.MAY) && date.getDayOfMonth() > 1 && date.getDayOfMonth() < 20) || queen.getAgeOfQueen() == 5) {
+                    hive.changeQueen();
                 }
 
-                calendar.add(Calendar.DAY_OF_MONTH, 1); // Move to the next day
+                Honey honey = hive.getHoney();
+                double whetherIndex = whether.whetherIndex(month, date.getDayOfMonth());
+
+                int numberOfEggs = queen.makeEggs(honey, whetherIndex);
+                hive.fillUpEggsFrame(date, numberOfEggs);
+
+                hive.checkIfCanAddNAewEggsFrameInHive();
+                boolean checkIfCanAddNAewEggsFrameInHive = hive.checkIfCanAddNAewEggsFrameInHive();
+                if (checkIfCanAddNAewEggsFrameInHive) {
+                    String newAction = "Add new eggs frame in Hive " + hive.getId();
+                    String actionMarker = "ADD_NEW_EGGS_FRAME";
+
+                    Optional<ActionOfTheWeek> existingAction = actionsOfTheWeek.stream()
+                            .filter(action -> action.getActionOfTheWeekMarker().equals(actionMarker))
+                            .findFirst();
+
+                    if (existingAction.isPresent()) {
+                        if (!existingAction.get().getHiveIds().contains(hive.getId())) {
+                            existingAction.get().getHiveIds().add(hive.getId());
+                        }
+                    } else {
+                        List<Integer> newHiveIds = new ArrayList<>();
+                        newHiveIds.add(hive.getId());
+                        ActionOfTheWeek actionOfTheWeek = new ActionOfTheWeek(newAction, actionMarker, newHiveIds);
+                        actionsOfTheWeek.add(actionOfTheWeek);
+                    }
+
+                    System.out.println(newAction);
+                    System.out.println(actionMarker);
+
+                    lifeOfBeesGame.setActionOfTheWeek(actionsOfTheWeek);
+                }
+
+
+                hive.moveAnEggsFrameFromUnsplitHiveToASplitOne();
+
+                hive.checkIfCanAddANewHoneyFrameInHive();
+                boolean checkIfCanAddANewHoneyFrameInHive = hive.checkIfCanAddANewHoneyFrameInHive();
+                if (checkIfCanAddANewHoneyFrameInHive) {
+                    String newAction = "Add new honey frame in Hive ";
+                    String actionMarker = "ADD_NEW_HONEY_FRAME";
+
+                    Optional<ActionOfTheWeek> existingAction = actionsOfTheWeek.stream()
+                            .filter(action -> action.getActionOfTheWeekMarker().equals(actionMarker))
+                            .findFirst();
+
+                    if (existingAction.isPresent()) {
+                        if (!existingAction.get().getHiveIds().contains(hive.getId())) {
+                            existingAction.get().getHiveIds().add(hive.getId());
+                        }
+                    } else {
+                        List<Integer> newHiveIds = new ArrayList<>();
+                        newHiveIds.add(hive.getId());
+                        ActionOfTheWeek actionOfTheWeek = new ActionOfTheWeek(newAction, actionMarker, newHiveIds);
+                        actionsOfTheWeek.add(actionOfTheWeek);
+                    }
+
+                    lifeOfBeesGame.setActionOfTheWeek(actionsOfTheWeek);
+                }
+//                    if ((month.equals(HarvestingMonths.APRIL) || month.equals(HarvestingMonths.MAY) || month.equals(HarvestingMonths.JUNE)) && date.getDayOfMonth() == 20) {
+//                        actionsOfTheWeek.add("Do you want to collect honey from the hives?");
+//                    } else {
+//                        hive.addHoneyBatches(honey.makeHoneyBatch(hive, date));
+//                    }
+
+                hive.checkAndAddEggsToBees(date);
+                hive.fillUpExistingHoneyFrameFromHive(date);
+                hive.beesDie(date);
             }
 
-            apiary.honeyHarvestedByHoneyType();
-            System.out.println("your apiary at the end of the year " + year + " is: " + apiary);
+            date = date.plusDays(1); // Actualizează data
+            System.out.println("day is: " + date.getDayOfMonth());
+            System.out.println("daily iterator is: " + dailyIterator);
 
-            List<Hive> hives = apiary.getHives();// have to build a hibernate method
+            month = getHarvestingMonth(date);
+        }
 
+        apiary.honeyHarvestedByHoneyType();
+        List<Hive> hives = apiary.getHives();
+
+        if (date.isEqual(LocalDate.of(date.getYear(), 9, 30))) {
             for (Hive hive : hives) {
                 apiary.hibernate(hive);
             }
+            System.out.println("your apiary at the beginning of the new year is: " + apiary);
 
-            calendar.set(Calendar.MONTH, Calendar.MARCH);// Reset month for the next year
-
-            System.out.println("your apiary at the beginning of new  year is: " + apiary);
         }
+
+        String newCurrentDate = date.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        lifeOfBeesGame.setCurrentDate(newCurrentDate);
+
+        System.out.println("new date is: " + newCurrentDate);
+
+        return new LifeOfBees(apiary, gameId, gameName, location, newCurrentDate, todayWeather.getSpeedWind(), todayWeather.getTemperature(), todayWeather.getPrecipitation(), moneyInTheBank, totalKgOfHoney, actionOfTheWeek);
     }
+
 
     public Integer getGameId() {
         return gameId;
@@ -140,9 +196,7 @@ public class LifeOfBees {
         return temperature;
     }
 
-    public Action getAction() {
-        return action;
-    }
+
 
     public double getSpeedWind() {
         return speedWind;
@@ -152,9 +206,7 @@ public class LifeOfBees {
         return precipitation;
     }
 
-    public String getActionOfTheWeek() {
-        return actionOfTheWeek;
-    }
+
 
     public double getMoneyInTheBank() {
         return moneyInTheBank;
@@ -182,5 +234,25 @@ public class LifeOfBees {
 
     public String getCurrentDate() {
         return currentDate;
+    }
+
+    public double getTotalKgOfHoney() {
+        return totalKgOfHoney;
+    }
+
+    public void setTotalKgOfHoney(double totalKgOfHoney) {
+        this.totalKgOfHoney = totalKgOfHoney;
+    }
+
+    public void setCurrentDate(String currentDate) {
+        this.currentDate = currentDate;
+    }
+
+    public List<ActionOfTheWeek> getActionOfTheWeek() {
+        return actionOfTheWeek;
+    }
+
+    public void setActionOfTheWeek(List<ActionOfTheWeek> actionOfTheWeek) {
+        this.actionOfTheWeek = actionOfTheWeek;
     }
 }
