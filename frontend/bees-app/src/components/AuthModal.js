@@ -41,6 +41,7 @@ const AuthModal = ({ handleClose, handleSubmit, handleInputChange, formData, isS
                         placeholder="Password"
                         value={formData.password}
                         onChange={handleInputChange}
+                    
                     />
                     {isSignUp && (
                         <>
@@ -62,7 +63,7 @@ const AuthModal = ({ handleClose, handleSubmit, handleInputChange, formData, isS
                         {isSignUp ? 'Sign Up' : 'Sign In'}
                     </button>
 
-                    <button  className="btn btn-danger" type="button" onClick={handleClose}>
+                    <button className="btn btn-danger" type="button" onClick={handleClose}>
                         Cancel
                     </button>
 

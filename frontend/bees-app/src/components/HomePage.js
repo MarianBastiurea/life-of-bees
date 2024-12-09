@@ -3,6 +3,8 @@ import '../App.css';
 import NewGameModal from './CreateNewGame';
 import ApiaryCardsRow from './ApiaryCardsRow';
 import AuthModal from './AuthModal';
+import { GoogleLogin } from '@react-oauth/google'; 
+import GitHubLogin from 'react-github-login'; 
 
 import { authenticateUser, registerUser } from './BeesApiService';
 
@@ -13,9 +15,8 @@ const HomePage = () => {
     const [isSignUp, setIsSignUp] = useState(false);
     const [authMessage, setAuthMessage] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [userId, setUserId] = useState(null);
+    const [userName, setUserName] = useState(null);
 
-    // Datele utilizatorului
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -23,7 +24,10 @@ const HomePage = () => {
     });
 
     const handlePublicGameClick = () => {
-        if (isAuthenticated) setShowPublicModal(true);
+        const username = 'JohnDoe';
+        const password = 'JohnDoe123';
+        handleSignUp(username, password);
+        setShowPublicModal(true);
     };
 
     const handlePrivateGameClick = () => {
@@ -33,6 +37,13 @@ const HomePage = () => {
     const handleAuthClick = (signUp) => {
         setIsSignUp(signUp);
         setShowAuthModal(true);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userId');
+        setIsAuthenticated(false);
+        setUserName(null);
     };
 
     const handleCloseModal = () => {
@@ -49,11 +60,14 @@ const HomePage = () => {
     const handleSignIn = async (username, password) => {
         try {
             const response = await authenticateUser({ username, password });
-            console.log('SignIn response:', response); // Verifică structura răspunsului
+
+            localStorage.setItem('authToken', response.token);
+            localStorage.setItem('userId', response.userId);
+
             setAuthMessage('User authenticated successfully!');
             setIsAuthenticated(true);
             setShowAuthModal(false);
-            setUserId(response.userId); // Asigură-te că `userId` există în răspuns
+            setUserName(username);
         } catch (error) {
             console.error('Error in SignIn:', error);
             setAuthMessage(error.response?.data || 'Failed to sign in. Please try again.');
@@ -63,13 +77,15 @@ const HomePage = () => {
 
     const handleSignUp = async (username, password) => {
         try {
-            const response = await registerUser({ username, password });
-            console.log('SignUp response:', response); // Verifică structura răspunsului
+            const { token, userId } = await registerUser({ username, password });
+
+            localStorage.setItem('authToken', token);
+            localStorage.setItem('userId', userId);
+
             setAuthMessage('User registered successfully!');
             setIsAuthenticated(true);
             setShowAuthModal(false);
-            setUserId(response); // Asigură-te că `userId` există în răspuns
-            console.log('userId setat este:', response);
+            setUserName(username);
         } catch (error) {
             console.error('Error in SignUp:', error);
             setAuthMessage(error.response?.data?.error || 'Failed to register. Please try again.');
@@ -78,16 +94,42 @@ const HomePage = () => {
     };
 
 
+
+    const handleGoogleSuccess = (response) => {
+        console.log('Google Login Success:', response);
+        setIsAuthenticated(true);
+        setUserName('GoogleUser'); // Update with actual data from the response
+    };
+
+    const handleGoogleFailure = (error) => {
+        console.error('Google Login Failure:', error);
+        setAuthMessage('Google Login failed. Please try again.');
+    };
+
+    const handleGitHubSuccess = (response) => {
+        console.log('GitHub Login Success:', response);
+        setIsAuthenticated(true);
+        setUserName('GitHubUser'); // Update with actual data from the response
+    };
+
+    const handleGitHubFailure = (error) => {
+        console.error('GitHub Login Failure:', error);
+        setAuthMessage('GitHub Login failed. Please try again.');
+    };
+
+
+    const userId = localStorage.getItem('userId'); // Preia userId din local storage
+
     return (
         <div className="container">
             <h1>Life of Bees</h1>
             <button
                 className="btn btn-primary btn-lg"
                 onClick={handlePublicGameClick}
-                disabled={!isAuthenticated}
             >
                 Create public game
             </button>
+
             <button
                 className="btn btn-secondary btn-lg"
                 onClick={handlePrivateGameClick}
@@ -107,14 +149,34 @@ const HomePage = () => {
             </div>
 
             <div className="auth-buttons-container">
-                <div className="auth-buttons">
-                    <button className="btn btn-success" onClick={() => handleAuthClick(false)}>
-                        Sign In
-                    </button>
-                    <button className="btn btn-info" onClick={() => handleAuthClick(true)}>
-                        Sign Up
-                    </button>
-                </div>
+                {isAuthenticated ? (
+                    <div className="auth-logged-in">
+                        <span className="hello-user">Hello {userName}!</span>
+                        <button className="btn btn-danger" onClick={handleLogout}>
+                            Logout
+                        </button>
+                    </div>
+                ) : (
+                    <div className="auth-buttons">
+                        <button className="btn btn-success" onClick={() => handleAuthClick(false)}>
+                            Sign In
+                        </button>
+                        <button className="btn btn-info" onClick={() => handleAuthClick(true)}>
+                            Sign Up
+                        </button>
+                        <GoogleLogin
+                            onSuccess={handleGoogleSuccess}
+                            onError={handleGoogleFailure}
+                        />
+                        <GitHubLogin
+                            clientId="YOUR_GITHUB_CLIENT_ID"
+                            onSuccess={handleGitHubSuccess}
+                            onFailure={handleGitHubFailure}
+                            buttonText="Login with GitHub"
+                            className="btn btn-dark"
+                        />
+                    </div>
+                )}
             </div>
 
             <ApiaryCardsRow />
@@ -122,18 +184,17 @@ const HomePage = () => {
             {showPublicModal && (
                 <NewGameModal
                     isPublic={true}
+                    userId={userId} // Transmit userId către modal
                     handleClose={handleCloseModal}
-                    userId={userId} // Transmite userId către NewGameModal
                 />
             )}
             {showPrivateModal && (
                 <NewGameModal
                     isPublic={false}
+                    userId={userId} // Transmit userId către modal
                     handleClose={handleCloseModal}
-                    userId={userId} // Transmite userId către NewGameModal
                 />
             )}
-
 
             {showAuthModal && (
                 <AuthModal

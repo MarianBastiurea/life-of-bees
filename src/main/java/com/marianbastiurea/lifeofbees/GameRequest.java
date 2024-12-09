@@ -15,7 +15,25 @@ public class GameRequest {
     private String userId;
     private String username;
     private String password;
+    private String token;
+    private String gameId;
 
+
+    public String getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public String getGameName() {
         return gameName;
@@ -101,6 +119,8 @@ public class GameRequest {
                 ", userId='" + userId + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", token='" + token + '\'' +
+                ", gameId='" + gameId + '\'' +
                 '}';
     }
 }

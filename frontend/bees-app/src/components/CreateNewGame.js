@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { createGame, fetchLocations, fetchWeatherForStartDate, getGame} from './BeesApiService';
 
 
-const NewGameModal = ({ handleClose,isPublic,userId }) => {
+const NewGameModal = ({ handleClose,isPublic,userId,token }) => {
     useEffect(() => {
         console.log('Received userId in NewGameModal:', userId);
     }, [userId]);
@@ -28,24 +28,30 @@ const NewGameModal = ({ handleClose,isPublic,userId }) => {
                 startDate,
                 numberOfStartingHives,
                 userId,
-                isPublic
+                isPublic,
             };
-        
-            console.log('Game data being sent:', gameData);
-            const response = await createGame(gameData);
-            console.log('Datele initiale trimise de React:', response);
-            const gameId = response; 
-            console.log('id-ul jocului este: ',gameId)
-            const gameDetails = await getGame(gameId); 
-            console.log('detaliile jocului sunt:', gameDetails);
-            console.log('Jocul a inceput in Game View:', gameData);
+    
+            console.log('Game data for createNewGame sent:', gameData);
+            const response = await createGame(gameData); // Creează jocul
+            console.log('Răspunsul primit de la createGame:', response);
+    
+            // Extrage gameId și token din răspuns
+            const { gameId, token } = response; 
+            console.log('ID-ul jocului este:', gameId);
+            console.log('Tokenul JWT este:', token);
+    
+            // Obține detaliile jocului
+            const gameDetails = await getGame(gameId);
+            console.log('Detaliile jocului sunt:', gameDetails);
+    
+            // Navighează către GameView, trecând gameId
             navigate('/GameView', {
                 state: {
-                    gameId: gameId 
+                    gameId: gameId, // Transmite doar ID-ul jocului
                 }
             });
         } catch (error) {
-            console.error('Error starting game in CreateNewgame:', error);
+            console.error('Eroare la pornirea jocului în CreateNewGame:', error);
         }
     };
     
