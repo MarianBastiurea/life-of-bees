@@ -98,12 +98,12 @@ html, body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(198, 24, 24, 0.014);
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
+/*
 .modal-dialog {
   background: white;
   padding: 20px;
@@ -111,6 +111,8 @@ html, body {
   max-width: 500px;
   width: 100%;
 }
+  */
+  
 .suggestions-list {
   list-style-type: none;
   padding: 0;
@@ -149,20 +151,6 @@ html, body {
   cursor: pointer;
 }
 
-.modal-backdrop {
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  width: 50px; 
-  height: auto; 
-  background:  rgb(224, 133, 13);
-  z-index: 999; 
-  display: flex; 
-  justify-content: flex-end; 
-  align-items: flex-start; 
-  padding: 10px; 
-}
-
 .modal-content-auth {
   background: white; 
   padding: 30px; 
@@ -197,4 +185,15 @@ html, body {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+.modal-content-auth {
+  background: white; 
+  padding: 30px; 
+  border-radius: 5px; 
+  width: 300px; 
+  max-width: 40%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+  display: flex; 
+  flex-direction: column; 
+  gap: 30px; 
 }

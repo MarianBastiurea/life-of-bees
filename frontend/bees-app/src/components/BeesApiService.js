@@ -1,27 +1,78 @@
 import axios from 'axios';
 
-// Funcție pentru înregistrarea utilizatorilor
-export const registerUser = async (userData) => {
+const apiClient = axios.create({
+    baseURL: 'http://localhost:8080/api',
+});
+
+export const getAuthToken = () => {
+    return localStorage.getItem('authToken');
+};
+
+apiClient.interceptors.request.use(
+    (config) => {
+        const token = getAuthToken(); 
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
+
+
+export const registerUser = async (registerData) => {
     try {
-        const response = await axios.post('http://localhost:8080/api/auth/register', userData);
-        const userId = response.data.userId; // Extrage userId din răspuns
-        return userId; // Returnează userId pentru utilizare ulterioară
+        const response = await apiClient.post('/auth/register', registerData);
+        const { token, userId } = response.data; 
+        console.log('datele din Java:',response.data);
+        return { token, userId };
     } catch (error) {
         console.error('Error in registerUser:', error.response?.data || error.message);
         throw error;
     }
 };
 
+export const getGoogleClientId = async () => {
+    try {
+        const response = await apiClient.get('/auth/google-client-id');
+
+        console.log('datele din Java:',response.data);
+        return response.data ;
+    } catch (error) {
+        console.error('Error in registerUser:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const getGitHubClientId = async () => {
+    try {
+        const response = await apiClient.get('/auth/github-client-id');
+        console.log('Datele din Java:', response.data);
+        return response.data.clientId;
+    } catch (error) {
+        console.error('Error getting GitHub clientId:', error.response?.data || error.message);
+        throw error;
+    }
+};
 
 
+export const handleGitHubLogin = async () => {
+    try {
+        const clientId = await getGitHubClientId();
+        const oauthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=user`;
+        window.location.href = oauthUrl;
+    } catch (error) {
+        console.error('Error during GitHub login:', error);
+        throw error;
+    }
+};
 
 
-
-// Funcție pentru autentificarea utilizatorilor
 export const authenticateUser = async (authData) => {
     try {
-        const response = await axios.post('http://localhost:8080/api/auth/signin', authData);
-        return response.data;
+        const response = await apiClient.post('/auth/signin', authData);
+        const { token, userId } = response.data; 
+        return { token, userId };
     } catch (error) {
         console.error('Error in authenticateUser:', error.response?.data || error.message);
         throw error;
@@ -30,19 +81,20 @@ export const authenticateUser = async (authData) => {
 
 
 
+
 export const createGame = async (gameData) => {
     try {
-        const response = await axios.post('http://localhost:8080/api/bees/game', gameData);
-        return response.data;
+        const response = await apiClient.post('/bees/game', gameData);
+        return response.data; 
     } catch (error) {
-        console.error('Error getting data in createGame:', error);
+        console.error('Error in createGame:', error.response?.data || error.message);
         throw error;
     }
 };
 
 export const getGame = async (gameId) => {
     try {
-        const response = await axios.get(`http://localhost:8080/api/bees/game/${gameId}`);
+        const response = await apiClient.get(`/bees/game/${gameId}`);
         return response.data;
     } catch (error) {
         console.error('Error getting data in BeesApiService:', error);
@@ -52,7 +104,7 @@ export const getGame = async (gameId) => {
 
 export const iterateWeek = async (gameId, requestData) => {
     try {
-        const response = await axios.post(`http://localhost:8080/api/bees/iterate/${gameId}`, requestData, {
+        const response = await apiClient.post(`/bees/iterate/${gameId}`, requestData, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -72,8 +124,8 @@ export const iterateWeek = async (gameId, requestData) => {
 export const submitActionsOfTheWeek = async (gameId, actionsData) => {
     console.log('Actions data being sent:', actionsData);
     try {
-        const url = `http://localhost:8080/api/bees/submitActionsOfTheWeek/${gameId}`;
-        const response = await axios.post(url, actionsData);
+       
+        const response = await apiClient.post(`/bees/submitActionsOfTheWeek/${gameId}`, actionsData);
         if (response.status !== 200) {
             throw new Error(`Failed to submit actions, status: ${response.status}`);
         }
@@ -86,8 +138,7 @@ export const submitActionsOfTheWeek = async (gameId, actionsData) => {
 
 export const getHoneyQuantities = async (gameId) => {
     try {
-        const url = `http://localhost:8080/api/bees/getHoneyQuantities/${gameId}`;
-        const response = await axios.get(url);
+        const response = await apiClient.get(`/bees/getHoneyQuantities/${gameId}`);
         return response.data;
     } catch (error) {
         console.error('Error sending honeyQuantities:', error);
@@ -100,9 +151,7 @@ export const sendSellHoneyQuantities = {
         try {
             const payload = { ...soldData, totalValue };
             console.log('Payload din BeesApiService:', JSON.stringify(payload, null, 2));
-
-            const url = `http://localhost:8080/api/bees/sellHoney/${gameId}`;
-            const response = await axios.post(url, payload);
+            const response = await apiClient.post(`/bees/sellHoney/${gameId}`, payload);
             return response.data;
         } catch (error) {
             console.error('Error sending SellHoneyQuantities:', error);
@@ -115,9 +164,7 @@ export const sendSellHoneyQuantities = {
 export const buyHives = async (gameId, numberOfHives) => {
     try {
         console.log("Number of hives to buy:", numberOfHives);
-
-        const url = `http://localhost:8080/api/bees/buyHives/${gameId}`;
-        const response = await axios.post(url, { numberOfHives }, {
+        const response = await apiClient.post(`/bees/buyHives/${gameId}`, { numberOfHives }, {
             headers: { 'Content-Type': 'application/json' }
         });
         return response.data;

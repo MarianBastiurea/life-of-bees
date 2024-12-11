@@ -12,6 +12,8 @@ import java.util.List;
 public class LifeOfBees {
     @Id
     private String id;
+    private String userId;
+
     private Apiary apiary;
     private List<ActionOfTheWeek> actionOfTheWeek;
     private String gameName;
@@ -23,11 +25,13 @@ public class LifeOfBees {
     private boolean isPublic;
 
 
-    public LifeOfBees(String id,Apiary apiary,
+
+    public LifeOfBees(String id, String userId, Apiary apiary,
                       String gameName, String location, LocalDate currentDate,
                       WeatherData weatherData, double moneyInTheBank, double totalKgOfHoneyHarvested,
                       List<ActionOfTheWeek> actionOfTheWeek) {
         this.id=id;
+        this.userId=userId;
         this.apiary = apiary;
         this.gameName = gameName;
         this.location = location;
@@ -39,7 +43,7 @@ public class LifeOfBees {
 
     }
 
-    public LifeOfBees(String gameName,Apiary apiary, List<ActionOfTheWeek> actionOfTheWeek,
+    public LifeOfBees(String gameName, String userId,Apiary apiary, List<ActionOfTheWeek> actionOfTheWeek,
                      String location, LocalDate currentDate, WeatherData weatherData,
                       double moneyInTheBank, double totalKgOfHoneyHarvested) {
         this.apiary = apiary;
@@ -50,6 +54,7 @@ public class LifeOfBees {
         this.weatherData = weatherData;
         this.moneyInTheBank = moneyInTheBank;
         this.totalKgOfHoneyHarvested = totalKgOfHoneyHarvested;
+        this.userId=userId;
     }
 
     public LifeOfBees() {
@@ -58,8 +63,9 @@ public class LifeOfBees {
     @Override
     public String toString() {
         return "LifeOfBees{" +
-                "id="+id+
-                "apiary=" + apiary +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", apiary=" + apiary +
                 ", actionOfTheWeek=" + actionOfTheWeek +
                 ", gameName='" + gameName + '\'' +
                 ", location='" + location + '\'' +
@@ -67,6 +73,7 @@ public class LifeOfBees {
                 ", weatherData=" + weatherData +
                 ", moneyInTheBank=" + moneyInTheBank +
                 ", totalKgOfHoneyHarvested=" + totalKgOfHoneyHarvested +
+                ", isPublic=" + isPublic +
                 '}';
     }
 
@@ -115,7 +122,7 @@ public class LifeOfBees {
             date = date.plusDays(1);
         }
         lifeOfBeesGame.setCurrentDate(date);
-        return new LifeOfBees(id,apiary, gameName, location, date, dailyWeather, moneyInTheBank, totalKgOfHoneyHarvested, actionOfTheWeek);
+        return new LifeOfBees(id,userId, apiary, gameName, location, date, dailyWeather, moneyInTheBank, totalKgOfHoneyHarvested, actionOfTheWeek);
     }
 
 
@@ -180,5 +187,13 @@ public class LifeOfBees {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
