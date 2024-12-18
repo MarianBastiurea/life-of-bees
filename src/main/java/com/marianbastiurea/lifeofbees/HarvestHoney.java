@@ -1,7 +1,6 @@
 package com.marianbastiurea.lifeofbees;
 
 public class HarvestHoney {
-
     double Acacia = 0.0;
     double Rapeseed = 0.0;
     double WildFlower = 0.0;

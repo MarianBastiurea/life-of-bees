@@ -63,6 +63,10 @@ public class Hive {
         this.wasMovedAnEggsFrame = wasMovedAnEggsFrame;
     }
 
+    public boolean isWasMovedAnEggsFrame() {
+        return wasMovedAnEggsFrame;
+    }
+
     public void setItWasSplit(boolean itWasSplit) {
         this.itWasSplit = itWasSplit;
     }

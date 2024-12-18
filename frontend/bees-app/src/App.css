@@ -23,7 +23,7 @@ html, body {
   margin-bottom: 10px;
 }
 
-.card {
+.card-hive {
   background-color: white;
   color: black;
 }
@@ -39,6 +39,20 @@ html, body {
   align-items: center;
   padding-left: 15px;
 }
+
+.btn-custom-iterate,
+.p-custom-iterate {
+  background-color: rgb(16, 228, 80) !important;
+  color: black !important;
+  width: 250px;
+  height: 50px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+}
+
+
 
 .btn-danger.btn-custom {
   background-color: red !important;
@@ -90,27 +104,7 @@ html, body {
   color: black;
   flex-basis: 150px;
 }
-
-
-.modal.show {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-dialog {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 500px;
-  width: 100%;
-}
+  
 .suggestions-list {
   list-style-type: none;
   padding: 0;
@@ -135,66 +129,8 @@ html, body {
   text-align: left;
 }
 
-.auth-buttons {
-  position: absolute;
-  top: 10px; 
-  right: 10px; 
-  display: flex;
-  gap: 10px; 
+.card-hover:hover {
+  background-color: #cce7ff; 
 }
 
-.auth-buttons button {
-  padding: 10px 15px; 
-  border-radius: 5px;
-  cursor: pointer;
-}
 
-.modal-backdrop {
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  width: 50px; 
-  height: auto; 
-  background:  rgb(224, 133, 13);
-  z-index: 999; 
-  display: flex; 
-  justify-content: flex-end; 
-  align-items: flex-start; 
-  padding: 10px; 
-}
-
-.modal-content-auth {
-  background: white; 
-  padding: 30px; 
-  border-radius: 5px; 
-  width: 300px; 
-  max-width: 40%;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
-  display: flex; 
-  flex-direction: column; 
-  gap: 30px; 
-}
-
-.modal-content input {
-  width: 70%; 
-  padding: 20px;
-  margin-bottom: 10px; 
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-left: 20px;
-  
-}
-
-.modal-content button.btn-info {
-  background-color: #17a2b8; 
-  color: white;
-}
-
-.modal button {
-  width: auto; 
-  padding: 8px 12px; 
-  margin-top: 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}

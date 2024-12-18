@@ -1,12 +1,11 @@
 package com.marianbastiurea.lifeofbees;
 
-
-import org.springframework.data.annotation.Id;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class GameRequest {
-    private boolean isPublic;
+    private String gameType;
     private String gameName;
     private String location;
     private String startDate;
@@ -15,7 +14,29 @@ public class GameRequest {
     private String userId;
     private String username;
     private String password;
+    private String token;
+    private String gameId;
+    private List<LifeOfBees> gameHistory;
 
+    public List<LifeOfBees> getGameHistory() {
+        return gameHistory;
+    }
+
+    public String getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public String getGameName() {
         return gameName;
@@ -49,14 +70,6 @@ public class GameRequest {
         this.numberOfStartingHives = numberOfStartingHives;
     }
 
-    public Map<String, WeatherData> getAllWeatherData() {
-        return allWeatherData;
-    }
-
-    public void setAllWeatherData(Map<String, WeatherData> allWeatherData) {
-        this.allWeatherData = allWeatherData;
-    }
-
     public String getUserId() {
         return userId;
     }
@@ -65,13 +78,6 @@ public class GameRequest {
         this.userId = userId;
     }
 
-    public boolean isPublic() {
-        return isPublic;
-    }
-
-    public void setPublic(boolean aPublic) {
-        isPublic = aPublic;
-    }
 
     public String getUsername() {
         return username;
@@ -89,10 +95,18 @@ public class GameRequest {
         this.password = password;
     }
 
+    public String getGameType() {
+        return gameType;
+    }
+
+    public void setGameType(String gameType) {
+        this.gameType = gameType;
+    }
+
     @Override
     public String toString() {
         return "GameRequest{" +
-                "isPublic=" + isPublic +
+                "gameType=" + gameType +
                 ", gameName='" + gameName + '\'' +
                 ", location='" + location + '\'' +
                 ", startDate='" + startDate + '\'' +
@@ -101,6 +115,9 @@ public class GameRequest {
                 ", userId='" + userId + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", token='" + token + '\'' +
+                ", gameId='" + gameId + '\'' +
+                ", gameHistory=" + gameHistory +
                 '}';
     }
 }

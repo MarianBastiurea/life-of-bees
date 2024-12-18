@@ -2,7 +2,6 @@ package com.marianbastiurea.lifeofbees;
 
 import java.util.*;
 
-
 public class EggFrames {
 
     private int daysToHatch = 20;
@@ -25,7 +24,6 @@ public class EggFrames {
         this.eggsByDay = new LinkedList<>(Collections.nCopies(daysToHatch, 0));
     }
 
-    //static factory
     public static EggFrames getRandomEggFrames() {
         Random random = new Random();
         EggFrames eggFrames = new EggFrames(random.nextInt(3, 5));
@@ -38,7 +36,6 @@ public class EggFrames {
     public int getNumberOfEggFrames() {
         return numberOfEggFrames;
     }
-
 
     public EggFrames splitEggFrames() {
         LinkedList<Integer> newEggBatches = new LinkedList<>();
@@ -75,12 +72,10 @@ public class EggFrames {
             numberOfEggFrames++;
     }
 
-
     public boolean isFull() {
         int totalEggs = getEggs();
         return totalEggs >= maxEggPerFrame * numberOfEggFrames;
     }
-
 
     public int getEggs() {
         return eggsByDay.stream().mapToInt(Integer::intValue).sum();
@@ -111,7 +106,6 @@ public class EggFrames {
     public boolean checkIfAll6EggsFrameAre80PercentFull() {
         return isFullEggFrames() || !is80PercentFull();
     }
-
 
     @Override
     public String toString() {

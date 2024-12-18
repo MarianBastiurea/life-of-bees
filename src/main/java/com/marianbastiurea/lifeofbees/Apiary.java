@@ -2,8 +2,6 @@ package com.marianbastiurea.lifeofbees;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
-
 
 public class Apiary {
 
@@ -224,7 +222,6 @@ public class Apiary {
 
     }
 
-
     public void moveAnEggsFrame(List<List<Integer>> hiveIdPair) {
         for (List<Integer> hiveIds : hiveIdPair) {
             int sourceHiveId = hiveIds.get(0);
@@ -240,6 +237,5 @@ public class Apiary {
             System.out.println("acestea sunt ramele destinatie"+destinationEggFrames);
         }
     }
-
 }
 

@@ -53,7 +53,7 @@ const SellHoney = () => {
     const [soldValueTotals, setSoldValueTotals] = useState({});
     const [totalHoneyQuantity, setTotalHoneyQuantity] = useState(0);
     const navigate = useNavigate();
-    console.log(gameId);
+    console.log('acesta e gameId: ',gameId);
 
     useEffect(() => {
         const fetchHoneyData = async () => {
@@ -145,7 +145,7 @@ const SellHoney = () => {
             </div>
             <h3>Total value of honey sold: ${totalSoldValue}</h3>
             <button className="btn btn-primary mb-3" onClick={handleSubmit}>Submit</button>
-            <button className="btn btn-danger button-right-bottom" onClick={() => navigate('/gameView')}>Back</button>
+            <button className="btn btn-danger button-right-bottom" onClick={() => navigate('/gameView', { state: { gameId } })}>Back</button>
         </div>
     );
 };

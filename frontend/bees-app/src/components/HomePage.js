@@ -3,8 +3,10 @@ import '../App.css';
 import NewGameModal from './CreateNewGame';
 import ApiaryCardsRow from './ApiaryCardsRow';
 import AuthModal from './AuthModal';
-
 import { authenticateUser, registerUser } from './BeesApiService';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { useNavigate } from 'react-router-dom';
+
 
 const HomePage = () => {
     const [showPublicModal, setShowPublicModal] = useState(false);
@@ -13,9 +15,10 @@ const HomePage = () => {
     const [isSignUp, setIsSignUp] = useState(false);
     const [authMessage, setAuthMessage] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [userId, setUserId] = useState(null);
+    const [username, setUsername] = useState(null);
+    const [gameType, setGameType] = useState(null);
+    const [activeTab, setActiveTab] = useState("Public Game");
 
-    // Datele utilizatorului
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -23,16 +26,37 @@ const HomePage = () => {
     });
 
     const handlePublicGameClick = () => {
-        if (isAuthenticated) setShowPublicModal(true);
+        setGameType("public");
+        if (isAuthenticated) {
+            setShowPublicModal(true);
+        } else {
+            const username = 'JohnDoe';
+            const password = 'JohnDoe123';
+            handleSignUp(username, password);
+            setShowPublicModal(true);
+        }
     };
 
     const handlePrivateGameClick = () => {
+        setGameType("private");
         if (isAuthenticated) setShowPrivateModal(true);
     };
 
     const handleAuthClick = (signUp) => {
         setIsSignUp(signUp);
+        setFormData({
+            username: '',
+            password: '',
+            confirmPassword: '',
+        });
         setShowAuthModal(true);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userId');
+        setIsAuthenticated(false);
+        setUsername(null);
     };
 
     const handleCloseModal = () => {
@@ -49,11 +73,12 @@ const HomePage = () => {
     const handleSignIn = async (username, password) => {
         try {
             const response = await authenticateUser({ username, password });
-            console.log('SignIn response:', response); // Verifică structura răspunsului
-            setAuthMessage('User authenticated successfully!');
+
+            localStorage.setItem('authToken', response.token);
+            localStorage.setItem('userId', response.userId);
             setIsAuthenticated(true);
             setShowAuthModal(false);
-            setUserId(response.userId); // Asigură-te că `userId` există în răspuns
+            setUsername(username);
         } catch (error) {
             console.error('Error in SignIn:', error);
             setAuthMessage(error.response?.data || 'Failed to sign in. Please try again.');
@@ -63,13 +88,13 @@ const HomePage = () => {
 
     const handleSignUp = async (username, password) => {
         try {
-            const response = await registerUser({ username, password });
-            console.log('SignUp response:', response); // Verifică structura răspunsului
-            setAuthMessage('User registered successfully!');
+            const { token, userId } = await registerUser({ username, password });
+
+            localStorage.setItem('authToken', token);
+            localStorage.setItem('userId', userId);
             setIsAuthenticated(true);
             setShowAuthModal(false);
-            setUserId(response); // Asigură-te că `userId` există în răspuns
-            console.log('userId setat este:', response);
+            setUsername(username);
         } catch (error) {
             console.error('Error in SignUp:', error);
             setAuthMessage(error.response?.data?.error || 'Failed to register. Please try again.');
@@ -77,63 +102,121 @@ const HomePage = () => {
         }
     };
 
+    const handleTabClick = (tab) => {
+        setActiveTab(tab);
+    };
+
+    const userId = localStorage.getItem('userId');
+    const navigate = useNavigate();
+
+    const handleGameClick = (gameId) => {
+        navigate(`/GameView/${gameId}`);
+    };
 
     return (
         <div className="container">
             <h1>Life of Bees</h1>
-            <button
-                className="btn btn-primary btn-lg"
-                onClick={handlePublicGameClick}
-                disabled={!isAuthenticated}
-            >
-                Create public game
-            </button>
-            <button
-                className="btn btn-secondary btn-lg"
-                onClick={handlePrivateGameClick}
-                disabled={!isAuthenticated}
-            >
-                Create private game
-            </button>
+            <div className="d-flex gap-2 mb-3 justify-content-start align-items-center">
+                <button
+                    className="btn btn-primary btn-lg"
+                    onClick={handlePublicGameClick}
+                >
+                    Create public game
+                </button>
+
+                <button
+                    className="btn btn-secondary btn-lg"
+                    onClick={handlePrivateGameClick}
+                    disabled={!isAuthenticated}
+                >
+                    Create private game
+                </button>
+                {isAuthenticated ? (
+                    <div className="d-flex gap-3 ms-auto align-items-center">
+                        <span className="hello-user">Hello, {username}!</span>
+                        <button className="btn btn-danger" onClick={handleLogout}>
+                            Logout
+                        </button>
+                    </div>
+                ) : (
+                    <div className="d-flex gap-3 ms-auto">
+                        <button className="btn btn-success" onClick={() => handleAuthClick(false)}>
+                            Sign In
+                        </button>
+                    </div>
+                )}
+            </div>
             <div className="pt-3">
                 <ul className="nav nav-tabs pt-3">
                     <li className="nav-item">
-                        <a className="nav-link active" href="#">List</a>
+                        <button
+                            className={`nav-link ${activeTab === "Public Game" ? "active" : ""}`}
+                            onClick={() => handleTabClick("Public Game")}
+                        >
+                            Public Game
+                        </button>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="#">Map</a>
+                        <button
+                            className={`nav-link ${activeTab === "Private Game" ? "active" : ""}`}
+                            onClick={() => handleTabClick("Private Game")}
+                        >
+                            Private Game
+                        </button>
+                    </li>
+                    <li className="nav-item">
+                        <button
+                            className={`nav-link ${activeTab === "Map" ? "active" : ""}`}
+                            onClick={() => handleTabClick("Map")}
+                        >
+                            Map
+                        </button>
                     </li>
                 </ul>
-            </div>
 
-            <div className="auth-buttons-container">
-                <div className="auth-buttons">
-                    <button className="btn btn-success" onClick={() => handleAuthClick(false)}>
-                        Sign In
-                    </button>
-                    <button className="btn btn-info" onClick={() => handleAuthClick(true)}>
-                        Sign Up
-                    </button>
-                </div>
-            </div>
+                    <div className="tab-content pt-3">
+                        {activeTab === "Public Game" && (
+                                <ApiaryCardsRow
+                                    gameType="public"
+                                    isAuthenticated={isAuthenticated}
+                                    userId={userId}
+                                    onGameClick={handleGameClick}
+                                />
+                        )}
 
-            <ApiaryCardsRow />
+                        {activeTab === "Private Game" && isAuthenticated && (
+                                <div>
+                                    <ApiaryCardsRow
+                                        gameType="private"
+                                        isAuthenticated={isAuthenticated}
+                                        userId={userId}
+                                        onGameClick={handleGameClick}
+                                    />
+                                </div>
+                        )}
+
+                        {activeTab === "Map" && <div>Map content goes here.</div>}
+                    </div>
+                
+            </div>
 
             {showPublicModal && (
                 <NewGameModal
-                    isPublic={true}
+                    gameType="public"
+                    userId={userId}
+                    username={username}
                     handleClose={handleCloseModal}
-                    userId={userId} // Transmite userId către NewGameModal
-                />
-            )}
-            {showPrivateModal && (
-                <NewGameModal
-                    isPublic={false}
-                    handleClose={handleCloseModal}
-                    userId={userId} // Transmite userId către NewGameModal
                 />
             )}
 
+            {showPrivateModal && (
+                <NewGameModal
+                    gameType="private"
+                    userId={userId}
+                    username={username}
+                    handleClose={handleCloseModal}
+                />
+            )}
 
             {showAuthModal && (
                 <AuthModal
@@ -145,6 +228,10 @@ const HomePage = () => {
                     formData={formData}
                     isSignUp={isSignUp}
                     errorMessage={authMessage}
+                    setIsAuthenticated={setIsAuthenticated}
+                    setUsername={setUsername}
+                    authMessage={authMessage}
+                    setIsSignUp={setIsSignUp}
                 />
             )}
             {authMessage && <p className="auth-message">{authMessage}</p>}

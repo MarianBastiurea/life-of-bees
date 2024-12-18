@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createGame, fetchLocations, fetchWeatherForStartDate, getGame} from './BeesApiService';
+import { createGame, fetchLocations, fetchWeatherForStartDate, getGame } from './BeesApiService';
 
 
-const NewGameModal = ({ handleClose,isPublic,userId }) => {
+const NewGameModal = ({ handleClose, gameType, userId,username }) => {
     useEffect(() => {
         console.log('Received userId in NewGameModal:', userId);
     }, [userId]);
@@ -16,11 +16,11 @@ const NewGameModal = ({ handleClose,isPublic,userId }) => {
     const currentYear = new Date().getFullYear();
     const startYear = currentYear - numYears;
     const startDate = `${startYear}-03-01`;
-    
-    
+
+
     const handleSubmit = async (event) => {
         event.preventDefault();
-        
+
         try {
             const gameData = {
                 gameName,
@@ -28,27 +28,28 @@ const NewGameModal = ({ handleClose,isPublic,userId }) => {
                 startDate,
                 numberOfStartingHives,
                 userId,
-                isPublic
+                gameType,
+                username
             };
-        
-            console.log('Game data being sent:', gameData);
+            console.log('jocul este setat ca', gameType)
+            console.log('Game data for createNewGame sent:', gameData);
             const response = await createGame(gameData);
-            console.log('Datele initiale trimise de React:', response);
-            const gameId = response; 
-            console.log('id-ul jocului este: ',gameId)
-            const gameDetails = await getGame(gameId); 
-            console.log('detaliile jocului sunt:', gameDetails);
-            console.log('Jocul a inceput in Game View:', gameData);
+            console.log('Răspunsul primit de la createGame:', response);
+            const { gameId, token } = response;
+            console.log('ID-ul jocului este:', gameId);
+            console.log('Tokenul JWT este:', token);
+            const gameDetails = await getGame(gameId);
+            console.log('Detaliile jocului sunt:', gameDetails);
             navigate('/GameView', {
                 state: {
-                    gameId: gameId 
+                    gameId: gameId,
                 }
             });
         } catch (error) {
-            console.error('Error starting game in CreateNewgame:', error);
+            console.error('Eroare la pornirea jocului în CreateNewGame:', error);
         }
     };
-    
+
 
     const handleLocationChange = async (e) => {
         const query = e.target.value;
@@ -66,7 +67,6 @@ const NewGameModal = ({ handleClose,isPublic,userId }) => {
         setLocation(suggestion);
         setSuggestions([]);
     };
-
 
 
     return (
@@ -155,12 +155,11 @@ const NewGameModal = ({ handleClose,isPublic,userId }) => {
                                     />
                                 </div>
                             </div>
-
-                            <button type="submit" className="btn btn-secondary">Start</button>
+                            <div className="d-flex justify-content-between">
+                                <button type="submit" className="btn btn-secondary">Start</button>
+                                <button type="button" className="btn btn-danger" onClick={handleClose}>Close</button>
+                            </div>
                         </form>
-                    </div>
-                    <div className="modal-footer">
-                        <button type="button" className="btn btn-danger" onClick={handleClose}>Close</button>
                     </div>
                 </div>
             </div>
