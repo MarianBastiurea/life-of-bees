@@ -107,6 +107,10 @@ public class EggFrames {
         return isFullEggFrames() || !is80PercentFull();
     }
 
+    public boolean canAddNewEggsFrame() {
+        return isFullEggFrames() && is80PercentFull();
+    }
+
     @Override
     public String toString() {
         return "EggFrames{" +

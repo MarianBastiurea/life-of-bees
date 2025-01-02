@@ -15,6 +15,9 @@ public class WeatherData {
 
     }
 
+    public WeatherData() {
+    }
+
     public WeatherData(LocalDate date) {
         this.date = date;
     }

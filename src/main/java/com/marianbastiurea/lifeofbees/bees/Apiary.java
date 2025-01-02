@@ -1,9 +1,12 @@
 package com.marianbastiurea.lifeofbees.bees;
 
+import com.marianbastiurea.lifeofbees.action.ActionType;
+import com.marianbastiurea.lifeofbees.action.ActionsOfTheWeek;
 import com.marianbastiurea.lifeofbees.game.LifeOfBees;
 import com.marianbastiurea.lifeofbees.action.ActionOfTheWeek;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.*;
 
 public class Apiary {
@@ -41,6 +44,34 @@ public class Apiary {
         return null;
     }
 
+    public List<Hive> createHive(int numberOfHives, LocalDate date) {
+        Random random = new Random();
+        List<Hive> newHives = new ArrayList<>();
+        for (int i = 1; i <= numberOfHives; i++) {
+            int ageOfQueen = random.nextInt(1, 6);
+            EggFrames eggFrames = EggFrames.getRandomEggFrames();
+            LinkedList<Integer> beesBatches = new LinkedList<>();
+            for (int k = 0; k < 30; k++) {
+                beesBatches.add(random.nextInt(600, 700));
+            }
+            HoneyFrames honeyFrames = HoneyFrames.getRandomHoneyFrames();
+
+            Hive hive = new Hive(
+                    newHives.size() + 1,
+                    false,
+                    false,
+                    eggFrames,
+                    honeyFrames,
+                    beesBatches,
+                    new ArrayList<>(),
+                    new Queen(ageOfQueen)
+            );
+            newHives.add(hive);
+        }
+        return newHives;
+
+    }
+
 
     public void splitHive(Hive hive) {
         List<Hive> newHives = new ArrayList<>();
@@ -51,22 +82,9 @@ public class Apiary {
             newHive.setWasMovedAnEggsFrame(false);
             EggFrames newHiveEggFrames = hive.getEggFrames().splitEggFrames();
             newHive.setEggFrames(newHiveEggFrames);
-
-            List<HoneyFrame> newHiveHoneyFrames = new ArrayList<>();
-            for (int i = 0; i < 3; i++) {
-                HoneyFrame frameToMove = hive.getHoneyFrames().remove(hive.getHoneyFrames().size() - 1);
-                newHiveHoneyFrames.add(frameToMove);
-            }
+            HoneyFrames newHiveHoneyFrames = hive.getHoneyFrames().splitHoneyFrames();
             newHive.setHoneyFrames(newHiveHoneyFrames);
-
-            LinkedList<Integer> hiveBeesBatches = hive.getBeesBatches();
-            LinkedList<Integer> newHiveBeesBatches = new LinkedList<>(hiveBeesBatches);
-            for (int i = 0; i < hiveBeesBatches.size(); i++) {
-                int bees = hiveBeesBatches.get(i);
-                int beesToTransfer = bees / 2;
-                hiveBeesBatches.set(i, bees - beesToTransfer);
-                newHiveBeesBatches.add(beesToTransfer);
-            }
+            LinkedList<Integer> newHiveBeesBatches = hive.splitBeesBatches();
             newHive.setBeesBatches(newHiveBeesBatches);
             newHive.setHoneyBatches(new ArrayList<>());
             newHives.add(newHive);
@@ -76,82 +94,64 @@ public class Apiary {
         hives.addAll(newHives);
     }
 
+    public Apiary hibernate() {
+        System.out.println("Aceasta e apiary inainte de hibernate: " + this);
+        this.getHives().forEach(hive -> {
 
-    public List<ActionOfTheWeek> hibernate(LifeOfBees lifeOfBeesGame, List<ActionOfTheWeek> actionsOfTheWeek) {
-        LocalDate date = lifeOfBeesGame.getCurrentDate();
-        Apiary apiary = lifeOfBeesGame.getApiary();
-        System.out.println("aceasta e apiary inainte de hibernate: " + apiary);
-        List<Hive> hives = lifeOfBeesGame.getApiary().getHives();
-        for (Hive hive : hives) {
             hive.getQueen().setAgeOfQueen(hive.getQueen().getAgeOfQueen() + 1);
             hive.setItWasSplit(false);
             hive.setWasMovedAnEggsFrame(false);
             hive.getHoneyBatches().clear();
             hive.getEggFrames().extractEggBatchesForFrame();
-            hive.getHoneyFrames().remove(hive.getHoneyFrames().size() - 1);
-            hive.getHoneyFrames().remove(hive.getHoneyFrames().size() - 1);
+            hive.getHoneyFrames().removeHoneyFrames();
+            hive.removeBeesBatches();
+        });
+
+        randomRemoveAHive(this.getHives());
+        System.out.println("Aceasta e apiary dupa hibernate: " + this);
+        return this;
+    }
+
+
+    private static void randomRemoveAHive(List<Hive> hives) {
+        if (!hives.isEmpty()) {
+            Random random = new Random();
+            Hive hiveToRemove = hives.remove(random.nextInt(hives.size()));
+            System.out.println("Stup eliminat cu ID: " + hiveToRemove.getId());
+        }
+    }
+
+
+    public Integer checkInsectControl(LocalDate currentDate) {
+        return ((currentDate.getMonthValue() >= 4 && currentDate.getMonthValue() <= 8) // Aprilie - August
+                && (currentDate.getDayOfMonth() == 11 || currentDate.getDayOfMonth() == 21))
+                ? this.getHives().size()
+                : 0;
+    }
+
+
+    public void doInsectControl() {
+        for (Hive hive : hives) {
             hive.getBeesBatches().removeLast();
             hive.getBeesBatches().removeLast();
         }
-        Random random = new Random();
-        int indexToRemove = random.nextInt(hives.size());
-        Hive hiveToRemove = hives.get(indexToRemove);
-        int hiveIdRemoved = hiveToRemove.getId();
-        hives.remove(hiveToRemove);
-        Map<String, Object> data = new HashMap<>();
-        data.put("totalHives", apiary.getHives().size());
-        data.put("hibernateStartDate", date.toString());
-        data.put("hiveIds", List.of(hiveIdRemoved));
-        ActionOfTheWeek actionInstance = new ActionOfTheWeek();
-       // actionInstance.addOrUpdateAction("HIBERNATE", hiveIdRemoved, data, actionsOfTheWeek);
-        System.out.println("aceasta e apiary dupa hibernate: " + apiary);
-
-        return actionsOfTheWeek;
     }
 
-    public List<ActionOfTheWeek> checkInsectControl(HarvestingMonths month, int dayOfMonth, List<ActionOfTheWeek> actionsOfTheWeek) {
-        if ((month.equals(HarvestingMonths.APRIL) || month.equals(HarvestingMonths.MAY) ||
-                month.equals(HarvestingMonths.JUNE) || month.equals(HarvestingMonths.JULY) || month.equals(HarvestingMonths.AUGUST) &&
-                (dayOfMonth == 11 || dayOfMonth == 21))) {
-            ActionOfTheWeek.addOrUpdateAction("INSECT_CONTROL", this.getHives().size(), actionsOfTheWeek);
-        }
-        return actionsOfTheWeek;
+    public Integer checkFeedBees(LocalDate currentDate) {
+        return (currentDate.getMonth() == Month.SEPTEMBER && currentDate.getDayOfMonth() == 1)
+                ? this.getHives().size()
+                : 0;
     }
 
-    public void doInsectControl(String answer, LifeOfBees lifeOfBeesGame) {
-        if ("yes".equals(answer)) {
-            lifeOfBeesGame.setMoneyInTheBank(lifeOfBeesGame.getMoneyInTheBank() - (lifeOfBeesGame.getApiary().getHives().size() * 10));
-        } else {
-            for (Hive hive : hives) {
-                hive.getBeesBatches().removeLast();
-                hive.getBeesBatches().removeLast();
-            }
+    public void doFeedBees() {
+        for (Hive hive : hives) {
+            hive.getBeesBatches().removeLast();
+            hive.getBeesBatches().removeLast();
+
         }
     }
 
-    public List<ActionOfTheWeek> checkFeedBees(HarvestingMonths month, int dayOfMonth, List<ActionOfTheWeek> actionsOfTheWeek) {
-        if (month.equals(HarvestingMonths.SEPTEMBER) &&
-                (dayOfMonth == 1)) {
-            ActionOfTheWeek.addOrUpdateAction("FEED_BEES", this.getHives().size(),  actionsOfTheWeek);
-
-        }
-        return actionsOfTheWeek;
-    }
-
-    public void doFeedBees(String answer, LifeOfBees lifeOfBeesGame) {
-        if ("yes".equals(answer)) {
-            lifeOfBeesGame.setMoneyInTheBank(lifeOfBeesGame.getMoneyInTheBank() - lifeOfBeesGame.getApiary().getHives().size() * 7);
-        } else {
-            for (Hive hive : hives) {
-                for (int day = 0; day < 7; day++) {
-                    hive.getBeesBatches().removeLast();
-                    hive.getBeesBatches().removeLast();
-                }
-            }
-        }
-    }
-
-    public Map<HoneyType, Double> honeyHarvestedByHoneyType() {
+    public void honeyHarvestedByHoneyType() {
         Map<HoneyType, Double> honeyHarvested = new HashMap<>();
         for (Hive hive : hives) {
             for (HoneyBatch honeyBatch : hive.getHoneyBatches()) {
@@ -169,8 +169,6 @@ public class Apiary {
         totalHarvestedHoney.setLinden(totalHarvestedHoney.getLinden() + honeyHarvested.getOrDefault(HoneyType.Linden, 0.0));
         totalHarvestedHoney.setSunFlower(totalHarvestedHoney.getSunFlower() + honeyHarvested.getOrDefault(HoneyType.SunFlower, 0.0));
         totalHarvestedHoney.setFalseIndigo(totalHarvestedHoney.getFalseIndigo() + honeyHarvested.getOrDefault(HoneyType.FalseIndigo, 0.0));
-
-        return honeyHarvested;
     }
 
     public double getTotalKgHoneyHarvested() {
@@ -191,34 +189,22 @@ public class Apiary {
         totalHarvestedHoney.setFalseIndigo(totalHarvestedHoney.getFalseIndigo() - soldHoneyData.FalseIndigo);
     }
 
-    public List<Hive> createHive(int numberOfHives, LocalDate date) {
-        Random random = new Random();
-        List<Hive> newHives = new ArrayList<>();
-        for (int i = 1; i <= numberOfHives; i++) {
-            int ageOfQueen = random.nextInt(1, 6);
-            EggFrames eggFrames = EggFrames.getRandomEggFrames();
-            LinkedList<Integer> beesBatches = new LinkedList<>();
-            for (int k = 0; k < 30; k++) {
-                beesBatches.add(random.nextInt(600, 700));
-            }
-            List<HoneyFrame> honeyFrames = new ArrayList<>();
-            for (int k = 0; k < random.nextInt(3, 5); k++) {
-                honeyFrames.add(new HoneyFrame(random.nextDouble(2.5, 3)));
-            }
-            Hive hive = new Hive(
-                    newHives.size() + 1,
-                    false,
-                    false,
-                    eggFrames,
-                    honeyFrames,
-                    beesBatches,
-                    new ArrayList<>(),
-                    new Queen(ageOfQueen)
-            );
-            newHives.add(hive);
-        }
-        return newHives;
+    public List<List<Integer>> checkIfCanMoveAnEggsFrame() {
+        List<List<Integer>> hiveIdPairs = new ArrayList<>();
+        List<Hive> hives = this.getHives();
+        for (Hive sourceHive : hives) {
+            if (sourceHive.getEggFrames().checkIfAll6EggsFrameAre80PercentFull()
+                    && !sourceHive.itWasSplit
+                    && !sourceHive.wasMovedAnEggsFrame) {
 
+                for (Hive targetHive : hives) {
+                    if (targetHive.itWasSplit && targetHive.getQueen().getAgeOfQueen() == 0) {
+                        hiveIdPairs.add(Arrays.asList(sourceHive.getId(), targetHive.getId()));
+                    }
+                }
+            }
+        }
+        return hiveIdPairs;
     }
 
     public void moveAnEggsFrame(List<List<Integer>> hiveIdPair) {
@@ -232,8 +218,8 @@ public class Apiary {
             List<Integer> eggBatchesToMove = sourceEggFrames.extractEggBatchesForFrame();
             destinationEggFrames.addEggBatches(eggBatchesToMove);
             sourceHive.setWasMovedAnEggsFrame(true);
-            System.out.println("acesta e stupul sursa "+sourceEggFrames);
-            System.out.println("acestea sunt ramele destinatie"+destinationEggFrames);
+            System.out.println("acesta e stupul sursa " + sourceEggFrames);
+            System.out.println("acestea sunt ramele destinatie" + destinationEggFrames);
         }
     }
 
@@ -246,6 +232,15 @@ public class Apiary {
         formattedHoney.add("SunFlower " + totalHarvestedHoney.getSunFlower() + " kg");
         formattedHoney.add("FalseIndigo " + totalHarvestedHoney.getFalseIndigo() + " kg");
         return formattedHoney;
+    }
+
+
+    public static void addHivesToApiary(List<Hive> newHives, LifeOfBees lifeOfBeesgame) {
+        List<Hive> existingHives = lifeOfBeesgame.getApiary().getHives();
+        for (Hive hive : newHives) {
+            hive.setId(existingHives.size() + 1);
+            existingHives.add(hive);
+        }
     }
 
 }

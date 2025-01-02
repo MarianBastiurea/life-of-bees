@@ -9,12 +9,10 @@ import java.time.LocalDate;
 @Service
 public class WeatherService {
     @Autowired
-    private static RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
-    public static WeatherData getWeatherData(LocalDate startDate) {
+    public  WeatherData getWeatherData(LocalDate startDate) {
         String weatherApiUrl = "http://localhost:8081/api/weather/" + startDate;
-        System.out.println("acesta e weatherAPI url:"+weatherApiUrl);
-        WeatherData weatherData = restTemplate.getForObject(weatherApiUrl, WeatherData.class);
-        return weatherData;
+        return restTemplate.getForObject(weatherApiUrl, WeatherData.class);
     }
 }

@@ -22,7 +22,6 @@ public class LifeOfBeesFactory {
            WeatherData weatherData
     ) {
         LocalDate date = LocalDate.parse(startingDate);
-        List<ActionOfTheWeek> actionOfTheWeek = new ArrayList<>();
         double moneyInTheBank = 3000.0;
         double totalKgOfHoney = 0;
         Apiary apiary = new Apiary(new ArrayList<>());
@@ -30,7 +29,7 @@ public class LifeOfBeesFactory {
         apiary.getHives().addAll(newHives);
 
 
-        return new LifeOfBees(gameName, userId, gameType, apiary, actionOfTheWeek, location, date,
+        return new LifeOfBees(gameName, userId, gameType, apiary, location, date,
                 weatherData, moneyInTheBank, totalKgOfHoney);
     }
 }

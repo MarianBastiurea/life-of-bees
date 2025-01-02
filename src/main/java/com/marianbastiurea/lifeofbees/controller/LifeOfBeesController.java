@@ -46,6 +46,8 @@ public class LifeOfBeesController {
 
     @Autowired
     private LifeOfBeesService lifeOfBeesService;
+    @Autowired
+    private WeatherService weatherService;
 
 
     public LifeOfBeesController(LifeOfBeesRepository lifeOfBeesRepository,
@@ -63,13 +65,8 @@ public class LifeOfBeesController {
         System.out.println("Received request to create game: " + gameRequest);
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         LocalDate startDate = LocalDate.parse(gameRequest.getStartDate());
-
-        WeatherData weatherData =WeatherService.getWeatherData(startDate);
-        //TODO remove allWeatherData
-
-
+        WeatherData weatherData =weatherService.getWeatherData(startDate);
         String userIdFromToken;
-
         try {
             userIdFromToken = jwtTokenProvider.extractUserId(jwtToken);
             System.out.println("acesta e userId din Token" + userIdFromToken);
@@ -167,7 +164,7 @@ public class LifeOfBeesController {
         for (ActionOfTheWeek action : approvedActions) {
             processAction(action, apiary, lifeOfBeesGame);
         }
-        lifeOfBeesGame.getActionOfTheWeek().clear();
+        lifeOfBeesGame.getActionsOfTheWeek().getActions().clear();
         lifeOfBeesRepository.save(lifeOfBeesGame);
         GameResponse response = getGameResponse(lifeOfBeesGame);
         System.out.println("GameResponse după submitActionsOfTheWeek: " + response);
@@ -242,10 +239,10 @@ public class LifeOfBeesController {
         GameResponse gameResponse = new GameResponse();
         gameResponse.setId(game.getGameId());
         for (Hive hive : game.getApiary().getHives()) {
-            gameResponse.getHives().add(new HivesView(hive.getId(), hive.getAgeOfQueen(), hive.getEggFrames().getNumberOfEggFrames(), hive.getHoneyFrames().size(), hive.isItWasSplit()));
+            gameResponse.getHives().add(new HivesView(hive.getId(), hive.getAgeOfQueen(), hive.getEggFrames().getNumberOfEggFrames(), hive.getHoneyFrames().getNumberOfHoneyFrames(), hive.isItWasSplit()));
         }
         gameResponse.setTemperature(game.getWeatherData().getTemperature());
-        gameResponse.setActionOfTheWeek(game.getActionOfTheWeek());
+        //gameResponse.setActionsOfTheWeek(game.getActionsOfTheWeek());
         gameResponse.setWindSpeed(game.getWeatherData().getWindSpeed());
         gameResponse.setMoneyInTheBank(game.getMoneyInTheBank());
         gameResponse.setPrecipitation(game.getWeatherData().getPrecipitation());
