@@ -90,7 +90,7 @@ public class SecurityConfig {
         System.out.println("Creating CorsConfigurationSource in SecurityConfig...");
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:3000");
-        configuration.addAllowedOrigin("http://lifeofbees.co.uk");
+        configuration.addAllowedOrigin("https://lifeofbees.co.uk");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);

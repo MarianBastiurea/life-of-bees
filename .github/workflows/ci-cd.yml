@@ -27,7 +27,7 @@ jobs:
       # Step 3: Build the Spring Boot app
       - name: Build Spring Boot Application
         run: |
-          mvn package spring-boot:repackage -X -DREACT_APP_API_BASE_URL=http://lifeofbees.co.uk
+          mvn package spring-boot:repackage -X -DREACT_APP_API_BASE_URL=https://lifeofbees.co.uk
         env:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           
