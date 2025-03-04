@@ -207,8 +207,6 @@ const HomePage = () => {
                     {activeTab === "Public Game" && (
                         <ApiaryCardsRow
                             gameType="public"
-                            isAuthenticated={isAuthenticated}
-                            userId={userId}
                             onGameClick={handleGameClick}
                             handleDelete={handleDelete}
                         />

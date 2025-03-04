@@ -48,20 +48,20 @@ const ApiaryCardsRow = ({ isAuthenticated, userId, gameType, onGameClick, handle
         const fetchGames = async () => {
             try {
                 let recentGames;
-                if (isAuthenticated && userId && gameType) {
+                if (gameType === "private" && isAuthenticated && userId) {
                     recentGames = await getGamesForUserByType(userId, gameType);
                 } else {
                     recentGames = await getPublicGames();
                 }
-                console.log('these are games for user:', recentGames);
+                console.log('these are games:', recentGames);
                 setGames(recentGames);
             } catch (error) {
-                console.error('Error loading recent games:', error);
+                console.error('Error loading games:', error);
             }
         };
 
         fetchGames();
-    }, [isAuthenticated, userId, gameType]);
+    }, [gameType, isAuthenticated, userId]);
 
 
     const handleGameDelete = (gameId) => {
@@ -75,7 +75,7 @@ const ApiaryCardsRow = ({ isAuthenticated, userId, gameType, onGameClick, handle
         );
     };
 
-    const chunkedGames = chunkArray(games, 6);
+    const chunkedGames = chunkArray(games, 4);
 
     return (
         <div className="container">
