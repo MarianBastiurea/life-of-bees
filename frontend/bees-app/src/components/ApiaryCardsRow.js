@@ -9,13 +9,9 @@ const GameCard = ({ game, onDelete, onClick }) => (
                 className="btn-close" aria-label="Close"
                 onClick={(e) => {
                     e.stopPropagation();
-                    onDelete(game.gameId);
-                }}
-                style={{
-                    position: "absolute",
-                    top: "10px",
-                    right: "10px",
-                    zIndex: 1,
+                    if (window.confirm("Are you sure you want to delete this game?")) {
+                        onDelete(game.gameId);
+                    }
                 }}
             >
                 &times;
