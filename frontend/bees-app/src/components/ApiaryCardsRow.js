@@ -14,7 +14,6 @@ const GameCard = ({ game, onDelete, onClick }) => (
                     }
                 }}
             >
-                &times;
             </button>
 
             <div className="card-body" style={{ cursor: "pointer" }} onClick={() => onClick(game.gameId)}>

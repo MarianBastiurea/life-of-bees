@@ -1,5 +1,5 @@
-
-html, body {
+html,
+body {
   height: 100%;
   overflow-y: auto;
   margin: 0;
@@ -104,7 +104,7 @@ html, body {
   color: black;
   flex-basis: 150px;
 }
-  
+
 .suggestions-list {
   list-style-type: none;
   padding: 0;
@@ -125,27 +125,10 @@ html, body {
 }
 
 .input-sell-quantity {
-  width: 150; 
+  width: 150;
   text-align: left;
 }
 
 .card-hover:hover {
-  background-color: #cce7ff; 
-}
-
-.delete-button {
-  background-color: red;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 25px;
-  height: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  cursor: pointer;
-}
-.delete-button:hover {
-  background-color: darkred;
+  background-color: #cce7ff;
 }

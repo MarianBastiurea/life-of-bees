@@ -124,8 +124,10 @@ const HomePage = () => {
     };
 
     const handleTabClick = (tab) => {
+        if (tab === "Private Game" && !isAuthenticated) return;
         setActiveTab(tab);
     };
+
 
     const userId = localStorage.getItem('userId');
     const navigate = useNavigate();
@@ -197,6 +199,7 @@ const HomePage = () => {
                         <button
                             className={`nav-link ${activeTab === "Private Game" ? "active" : ""}`}
                             onClick={() => handleTabClick("Private Game")}
+                            disabled={!isAuthenticated}
                         >
                             Private Game
                         </button>
