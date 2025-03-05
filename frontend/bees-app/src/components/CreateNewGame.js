@@ -55,7 +55,7 @@ const NewGameModal = ({ handleClose, gameType, userId, username }) => {
         const query = e.target.value;
         setLocation(query);
 
-        if (query.length >= 3) {
+        if (query.length >= 0) {
             const locationSuggestions = await fetchLocations(query);
             setSuggestions(locationSuggestions);
         } else {
@@ -156,8 +156,8 @@ const NewGameModal = ({ handleClose, gameType, userId, username }) => {
                                 </div>
                             </div>
                             <div className="d-flex justify-content-between">
+                                <button type="button" className="btn btn-success">Start</button>
                                 <button type="button" className="btn btn-danger" onClick={handleClose}>Close</button>
-                                <button type="submit" className="btn btn-secondary">Start</button>
                             </div>
                         </form>
                     </div>

@@ -162,7 +162,7 @@ const HomePage = () => {
                 </button>
 
                 <button
-                    className="btn btn-secondary btn-lg"
+                    className="btn btn-primary btn-lg"
                     onClick={handlePrivateGameClick}
                     disabled={!isAuthenticated}
                 >

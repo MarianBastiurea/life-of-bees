@@ -6,7 +6,7 @@ const GameCard = ({ game, onDelete, onClick }) => (
     <div className="col-md-4 col-lg-3 mb-3">
         <div className="card h-100 text-center shadow-sm card-hover">
             <button
-                className="btn btn-danger btn-sm delete-button"
+                className="btn-close" aria-label="Close"
                 onClick={(e) => {
                     e.stopPropagation();
                     onDelete(game.gameId);
