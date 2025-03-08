@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import '../App.css';
 import HiveCard from './HiveCard';
-import { getGame, iterateWeek, buyHives } from './BeesApiService';
+import { getGame, iterateWeek, buyHives, getPublicGame } from './BeesApiService';
 import rapeseedFlower from '../flowersPhotos/rapeseed-flower.jpg';
 import wildFlower from '../flowersPhotos/wild-flower.jpg';
 import acaciaFlower from '../flowersPhotos/acacia-flower.jpg';
@@ -28,7 +28,8 @@ const GameView = () => {
     const [removedHiveMessage, setRemovedHiveMessage] = useState("");
     const endGameDate = new Date();
     const [gameEnded, setGameEnded] = useState(false);
-
+    const location = useLocation();
+    const isPublic = location.state?.isPublic || false;
     const [disabledActions, setDisabledActions] = useState({});
 
 
@@ -41,7 +42,10 @@ const GameView = () => {
         async function fetchGameData() {
             try {
                 console.log('data for  ID:', gameId);
-                const data = await getGame(gameId);
+
+                const data = isPublic
+                    ? await getPublicGame(gameId)
+                    : await getGame(gameId);
                 console.log('data:', data);
                 const currentDateStr = data.currentDate;
                 console.log('currentDate(string):', currentDateStr);
@@ -152,25 +156,25 @@ const GameView = () => {
         }
     };
 
-    const handleHarvestHoneyChange = (hiveId) => {
-        setSelectedActions((prevSelectedActions) => {
-            const newSelectedActions = { ...prevSelectedActions };
-            const harvestKey = `HARVEST_HONEY-${hiveId}`;
-            const isHarvesting = !newSelectedActions[harvestKey];
-
-
-            newSelectedActions[harvestKey] = isHarvesting;
-
-            if (isHarvesting) {
-                newSelectedActions[`ADD_EGGS_FRAME-${hiveId}`] = false;
-                newSelectedActions[`ADD_HONEY_FRAME-${hiveId}`] = false;
-                newSelectedActions[`SPLIT_HIVE-${hiveId}`] = false;
-            }
-
-            return newSelectedActions;
-        });
-    };
-
+    /* const handleHarvestHoneyChange = (hiveId) => {
+         setSelectedActions((prevSelectedActions) => {
+             const newSelectedActions = { ...prevSelectedActions };
+             const harvestKey = `HARVEST_HONEY-${hiveId}`;
+             const isHarvesting = !newSelectedActions[harvestKey];
+ 
+ 
+             newSelectedActions[harvestKey] = isHarvesting;
+ 
+             if (isHarvesting) {
+                 newSelectedActions[`ADD_EGGS_FRAME-${hiveId}`] = false;
+                 newSelectedActions[`ADD_HONEY_FRAME-${hiveId}`] = false;
+                 newSelectedActions[`SPLIT_HIVE-${hiveId}`] = false;
+             }
+ 
+             return newSelectedActions;
+         });
+     };
+ */
 
     const processBackendResponse = (response) => {
 
@@ -269,6 +273,11 @@ const GameView = () => {
         const currentMonth = new Date(gameData.currentDate).getMonth() + 1;
         return currentMonth === 3 || currentMonth === 4;
     };
+
+    const insuficientFunds = () => {
+        return gameData && gameData.moneyInTheBank < 500;
+    };
+
 
     const goToHiveHistory = (hiveId) => {
         if (!gameId) {
@@ -402,6 +411,9 @@ const GameView = () => {
 
                                                                     case "FEED_BEES":
                                                                     case "INSECT_CONTROL":
+                                                                        const isDisabled = gameData && gameData.moneyInTheBank < (gameData.hives.length * 10);
+
+
                                                                         return (
                                                                             <div>
                                                                                 <div className="form-check">
@@ -412,6 +424,7 @@ const GameView = () => {
                                                                                             value="yes"
                                                                                             checked={selectedActions[actionType] === "yes"}
                                                                                             onChange={() => handleYesNoChange(actionType, "yes")}
+                                                                                            disabled={isDisabled}
                                                                                         />
                                                                                         Yes
                                                                                     </label>
@@ -422,12 +435,14 @@ const GameView = () => {
                                                                                             value="no"
                                                                                             checked={selectedActions[actionType] === "no"}
                                                                                             onChange={() => handleYesNoChange(actionType, "no")}
+                                                                                            disabled={isDisabled}
                                                                                         />
                                                                                         No
                                                                                     </label>
                                                                                 </div>
                                                                             </div>
                                                                         );
+
 
                                                                     default:
                                                                         return null;
@@ -469,7 +484,15 @@ const GameView = () => {
                                     Total honey harvested: {gameData && gameData.totalKgOfHoneyHarvested !== undefined ? gameData.totalKgOfHoneyHarvested.toFixed(2) : 'Loading'}
                                 </p>
 
-                                <p className="btn-custom p-custom mb-2">Money in the bank: {gameData && gameData.moneyInTheBank ? gameData.moneyInTheBank.toFixed(2) : 'Loading...'}</p>
+                                <p className="btn-custom p-custom mb-2">Money in the bank: {gameData && gameData.moneyInTheBank ? gameData.moneyInTheBank.toFixed(2) : ''}</p>
+
+                                {insuficientFunds() && (
+                                    <p className="error-message" style={{ color: "red", marginTop: "5px" }}>
+                                        You are nearing insufficient funds.
+                                        Please sell honey to perform InsectControl or FeedBees.
+                                    </p>
+                                )}
+
                                 <img src={flowerImage} alt="Flower based on date" className="img-custom mb-2" />
 
                                 <button className="btn btn-custom-iterate p-custom-iterate mb-2" onClick={handleIterateWeek}>Iterate one week</button>

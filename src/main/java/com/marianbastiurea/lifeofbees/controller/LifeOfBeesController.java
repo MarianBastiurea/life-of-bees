@@ -27,13 +27,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
+import static com.marianbastiurea.lifeofbees.bees.ApiaryParameters.priceOfAHive;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 
 
 @RestController
@@ -114,6 +115,16 @@ public class LifeOfBeesController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found"));
         String userId = principal.getName();
         accessDenied(lifeOfBeesGame, userId);
+        GameResponse response = getGameResponse(lifeOfBeesGame);
+        logger.info("Game sent to React from getGame: {}", response);
+        return response;
+    }
+
+    @GetMapping("/publicGame/{gameId}")
+    public GameResponse getPublicGame(@PathVariable String gameId) {
+        logger.info("Received request for game: {}", gameId);
+        LifeOfBees lifeOfBeesGame = lifeOfBeesService.getByGameId(gameId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found"));
         GameResponse response = getGameResponse(lifeOfBeesGame);
         logger.info("Game sent to React from getGame: {}", response);
         return response;
@@ -274,7 +285,7 @@ public class LifeOfBeesController {
         Integer numberOfHives = request.get("numberOfHives");
         Apiary apiary = lifeOfBeesGame.getApiary();
         apiary.getHives().addNewHivesToHives(apiary.getHives().createHives(numberOfHives, apiary.getHives().getCurrentDate()), lifeOfBeesGame);
-        double totalCost = numberOfHives * 500;
+        double totalCost = numberOfHives * priceOfAHive;
         lifeOfBeesGame.setMoneyInTheBank(lifeOfBeesGame.getMoneyInTheBank() - totalCost);
         lifeOfBeesService.save(lifeOfBeesGame);
         logger.info("new {} hives was added to apiary in game: {}", numberOfHives, gameId);

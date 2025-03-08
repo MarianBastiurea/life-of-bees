@@ -1,13 +1,19 @@
 import React from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { handleGoogleLogin } from './BeesApiService';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 
 const AuthModal = ({ handleClose, handleSubmit, handleInputChange, formData, isSignUp, setIsSignUp, errorMessage, setIsAuthenticated, setUsername, setAuthMessage, setFormData }) => {
     const [passwordError, setPasswordError] = React.useState(null);
     const location = useLocation();
+    const [username] = useState(null);
+    useEffect(() => {
+        setUsername("JohnDoe");
+        setIsAuthenticated(true);
+        localStorage.setItem("username", "JohnDoe");
+    }, []);
 
     const validatePasswords = () => {
         if (isSignUp && formData.password !== formData.confirmPassword) {
@@ -128,8 +134,9 @@ const AuthModal = ({ handleClose, handleSubmit, handleInputChange, formData, isS
                             <div className="d-flex justify-content-between">
                                 <button type="button" className="btn btn-danger" onClick={handleClose}>Close</button>
                                 <button className="btn btn-secondary" type="submit">
-                                    {isSignUp ? 'Sign Up' : 'Sign In'}
+                                    {isSignUp ? 'Sign Up' : username === "JohnDoe" ? 'Sign In' : 'Sign In'}
                                 </button>
+
                             </div>
 
                         </form>

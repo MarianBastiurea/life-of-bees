@@ -65,7 +65,6 @@ const HiveHistory = () => {
                                 const hive = entry.hive;
                                 if (!hive) return null;
                                 const beesNumber = hive.beesBatches?.beesBatches?.reduce((sum, batch) => sum + (batch || 0), 0) || 0;
-                                const honeyKg = hive.honeyBatches.reduce((total, batch) => total + batch.kgOfHoney, 0);
                                 const eggsFrameNo = hive.eggFrames.numberOfEggFrames;
                                 const honeyFrameNo = hive.honeyFrames.honeyFrame.length;
 
@@ -79,8 +78,13 @@ const HiveHistory = () => {
                                         <td>{hive.queen.ageOfQueen}</td>
                                         <td>{hive.honeyBatches.map((batch, index) => (
                                             <p key={index}>{batch.honeyType}</p>
-                                        ))}</td>
-                                        <td>{honeyKg}</td>
+                                        ))
+                                        }</td>
+                                        <td>
+                                            {hive.honeyBatches?.map((batch, index) => (
+                                                <p key={index}>{batch.kgOfHoney.toFixed(2)}</p>
+                                            )) || ""}
+                                        </td>
                                         <td>${entry.moneyInTheBank}</td>
                                         <td>{eggsFrameNo}</td>
                                         <td>{honeyFrameNo}</td>

@@ -89,20 +89,24 @@ const ApiaryHistory = () => {
                                                 <td></td>
                                             </>
                                         )}
-
-
                                         <td>${entry.moneyInTheBank}</td>
                                         <td>
                                             {entry.actionsOfTheWeek?.actions
                                                 ? Object.entries(entry.actionsOfTheWeek.actions)
-                                                    .map(([action, hives]) =>
-                                                        Array.isArray(hives) ? `${action}: ${hives.join(', ')}` : `${action}: ${hives}`
-                                                    )
+                                                    .map(([action, hives]) => {
+                                                        if (action === "MOVE_EGGS_FRAME" && Array.isArray(hives)) {
+                                                            return `${action}: ${hives
+                                                                .map(({ sourceHiveId, destinationHiveId }) =>
+                                                                    `(${sourceHiveId} → ${destinationHiveId})`)
+                                                                .join(', ')}`;
+                                                        }
+                                                        return Array.isArray(hives)
+                                                            ? `${action}: ${hives.join(', ')}`
+                                                            : `${action}: ${hives}`;
+                                                    })
                                                     .join('; ')
                                                 : 'No actions'}
                                         </td>
-
-
                                     </tr>
                                     {Array.isArray(entry.hives.hives) &&
                                         entry.hives.hives.slice(1).map((hive) => (
@@ -112,12 +116,15 @@ const ApiaryHistory = () => {
                                                 <td></td>
                                                 <td></td>
                                                 <td>{hive.id}</td>
-                                                <td>{hive.queen.ageOfQueen}</td>
+                                                <td>{hive.beesBatches.beesBatches.reduce((sum, batch) => sum + batch, 0)}</td>
+                                                <td>{hive.ageOfQueen}</td>
                                                 <td>
-                                                    {hive.honeyBatches.length > 0 ? hive.honeyBatches[0].honeyType : ''}
+                                                    {[
+                                                        ...new Set(hive.honeyBatches.map((batch) => batch.honeyType)),
+                                                    ].join(", ")}
                                                 </td>
                                                 <td>
-                                                    {hive.honeyBatches.reduce((sum, batch) => sum + batch.kgOfHoney, 0).toFixed(2)} kg
+                                                    {hive.honeyBatches?.map(batch => batch.kgOfHoney.toFixed(2)).join(", ") || ""}
                                                 </td>
                                                 <td>{hive.eggFrames.numberOfEggFrames}</td>
                                                 <td>{hive.honeyFrames.honeyFrame.length}</td>

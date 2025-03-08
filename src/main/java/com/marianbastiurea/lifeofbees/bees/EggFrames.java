@@ -115,11 +115,8 @@ public class EggFrames {
     }
 
     public boolean isFull() {
-        logger.info("Checking if egg frames are full...");
         int eggs = getEggs();
-        boolean result = eggs >= numberOfEggFrames * maxEggPerFrame * fullnessFactor;
-        logger.info("Eggs in frames: {}, Fullness check result: {}", eggs, result);
-        return result;
+        return eggs >= numberOfEggFrames * maxEggPerFrame * fullnessFactor;
     }
 
 

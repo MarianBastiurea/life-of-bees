@@ -28,12 +28,33 @@ const HomePage = () => {
     useEffect(() => {
         const storedToken = localStorage.getItem('authToken');
         const storedUsername = localStorage.getItem('username');
+
         console.log('Rehydrating auth state:', { storedToken, storedUsername });
+
         if (storedToken && storedUsername) {
-            setIsAuthenticated(true);
+            setIsAuthenticated(storedUsername !== 'JohnDoe');
             setUsername(storedUsername);
+        } else {
+            const autoLogin = async () => {
+                try {
+                    const username = 'JohnDoe';
+                    const password = 'JohnDoe123';
+                    const response = await authenticateUser({ username, password });
+
+                    localStorage.setItem('authToken', response.token);
+                    localStorage.setItem('userId', response.userId);
+                    localStorage.setItem('username', username);
+
+                    setUsername(username);
+                } catch (error) {
+                    console.error('Error in auto SignIn:', error);
+                }
+            };
+
+            autoLogin();
         }
     }, []);
+
 
     const handlePublicGameClick = () => {
         setGameType("public");
@@ -53,22 +74,43 @@ const HomePage = () => {
     };
 
     const handleAuthClick = (signUp) => {
+        console.log("handleAuthClick called with signUp:", signUp);
         setIsSignUp(signUp);
         setFormData({
             username: '',
             password: '',
             confirmPassword: '',
         });
-        setShowAuthModal(true);
+
+        if (!isAuthenticated) {
+            console.log("AuthModal should open now");
+            setShowAuthModal(true);
+        }
     };
 
-    const handleLogout = () => {
+
+
+    const handleLogout = async () => {
         localStorage.removeItem('authToken');
         localStorage.removeItem('userId');
         localStorage.removeItem('username');
         setIsAuthenticated(false);
         setUsername(null);
+        try {
+            const username = 'JohnDoe';
+            const password = 'JohnDoe123';
+            const response = await authenticateUser({ username, password });
+
+            localStorage.setItem('authToken', response.token);
+            localStorage.setItem('userId', response.userId);
+            localStorage.setItem('username', username);
+
+            setUsername(username);
+        } catch (error) {
+            console.error('Error in auto SignIn:', error);
+        }
     };
+
 
     const handleCloseModal = () => {
         setShowPublicModal(false);
@@ -90,7 +132,9 @@ const HomePage = () => {
             localStorage.setItem('username', username);
             console.log('Username saved to localStorage in SignIn:', username);
             console.log('User signed in signIn:', { userId, username });
-            setIsAuthenticated(true);
+            if (username !== 'JohnDoe') {
+                setIsAuthenticated(true);
+            }
             setShowAuthModal(false);
             setUsername(username);
         } catch (error) {
@@ -136,6 +180,7 @@ const HomePage = () => {
         navigate(`/GameView/${gameId}`);
     };
 
+
     const handleDelete = async (gameId) => {
         try {
             await deleteGame(gameId);
@@ -146,11 +191,12 @@ const HomePage = () => {
         }
     };
 
+
+
     useEffect(() => {
-        if (isAuthenticated) {
-            setShowAuthModal(false);
-        }
-    }, [isAuthenticated]);
+        console.log("showAuthModal changed:", showAuthModal);
+    }, [showAuthModal]);
+
 
     return (
         <div className="container">
@@ -170,20 +216,20 @@ const HomePage = () => {
                 >
                     Create private game
                 </button>
-                {isAuthenticated ? (
-                    <div className="d-flex gap-3 ms-auto align-items-center">
-                        <span className="hello-user">Hello, {username}!</span>
+                <div className="d-flex gap-3 ms-auto align-items-center">
+                    {username && <span className="hello-user">Hello, {username}!</span>}
+
+                    {username && username !== "JohnDoe" ? (
                         <button className="btn btn-danger" onClick={handleLogout}>
                             Logout
                         </button>
-                    </div>
-                ) : (
-                    <div className="d-flex gap-3 ms-auto">
+                    ) : (
                         <button className="btn btn-success" onClick={() => handleAuthClick(false)}>
                             Sign In
                         </button>
-                    </div>
-                )}
+                    )}
+                </div>
+
             </div>
             <div className="pt-3">
                 <ul className="nav nav-tabs pt-3">
@@ -210,9 +256,10 @@ const HomePage = () => {
                     {activeTab === "Public Game" && (
                         <ApiaryCardsRow
                             gameType="public"
-                            onGameClick={handleGameClick}
+                            onGameClick={(gameId) => navigate(`/GameView/${gameId}`, { state: { isPublic: true } })}
                             handleDelete={handleDelete}
                         />
+
                     )}
 
                     {activeTab === "Private Game" && isAuthenticated && (

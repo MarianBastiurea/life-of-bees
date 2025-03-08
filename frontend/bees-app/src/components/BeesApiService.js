@@ -96,6 +96,16 @@ export const getGame = async (gameId) => {
     }
 };
 
+export const getPublicGame = async (gameId) => {
+    try {
+        const response = await apiClient.get(`/bees/publicGame/${gameId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error getting public game data:', error);
+        throw error;
+    }
+};
+
 
 export const iterateWeek = async (gameId, requestData) => {
     try {
