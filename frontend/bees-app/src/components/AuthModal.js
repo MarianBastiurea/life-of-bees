@@ -9,11 +9,17 @@ const AuthModal = ({ handleClose, handleSubmit, handleInputChange, formData, isS
     const [passwordError, setPasswordError] = React.useState(null);
     const location = useLocation();
     const [username] = useState(null);
+    const [showAuthModal, setShowAuthModal] = useState(false);
+
+
     useEffect(() => {
-        setUsername("JohnDoe");
-        setIsAuthenticated(true);
-        localStorage.setItem("username", "JohnDoe");
+        const savedUsername = localStorage.getItem("username");
+        if (savedUsername) {
+            setUsername(savedUsername);
+            setIsAuthenticated(true);
+        }
     }, []);
+
 
     const validatePasswords = () => {
         if (isSignUp && formData.password !== formData.confirmPassword) {
@@ -32,6 +38,7 @@ const AuthModal = ({ handleClose, handleSubmit, handleInputChange, formData, isS
             localStorage.setItem('authToken', response.token);
             localStorage.setItem('userId', response.userId);
             localStorage.setItem('username', response.username);
+            handleClose();
             console.log('Autentificare cu Google reușită:', {
                 username: response.username,
                 token: response.token,
@@ -50,6 +57,18 @@ const AuthModal = ({ handleClose, handleSubmit, handleInputChange, formData, isS
     const toggleSignUp = () => {
         setIsSignUp((prev) => !prev);
     };
+
+
+    const handleCloseModal = () => {
+        setIsSignUp(false);
+        if (setFormData) {
+            setFormData({ username: '', password: '', confirmPassword: '' });
+        }
+        handleClose();
+        setIsAuthenticated(false)
+        setShowAuthModal(false);
+    };
+
 
     return (
         <div className="modal show" style={{ display: 'block' }}>
@@ -132,8 +151,8 @@ const AuthModal = ({ handleClose, handleSubmit, handleInputChange, formData, isS
                                 </>
                             )}
                             <div className="d-flex justify-content-between">
-                                <button type="button" className="btn btn-danger" onClick={handleClose}>Close</button>
-                                <button className="btn btn-secondary" type="submit">
+                                <button type="button" className="btn btn-danger" onClick={handleCloseModal}>Cancel</button>
+                                <button className="btn btn-success" type="submit">
                                     {isSignUp ? 'Sign Up' : username === "JohnDoe" ? 'Sign In' : 'Sign In'}
                                 </button>
 

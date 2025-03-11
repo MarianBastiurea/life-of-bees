@@ -8,8 +8,15 @@ const ApiaryHistory = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const location = useLocation();
-    const { gameId } = location.state || {};
+    const { gameId, isPublic } = location.state || {};
     const navigate = useNavigate();
+    const [isPublicState, setIsPublicState] = useState(isPublic);
+
+    useEffect(() => {
+        if (isPublic !== undefined) {
+            setIsPublicState(isPublic);
+        }
+    }, [isPublic]);
 
     useEffect(() => {
         if (gameId) {
@@ -149,7 +156,10 @@ const ApiaryHistory = () => {
             </div>
             <button
                 className="btn btn-danger mt-3 float-end"
-                onClick={() => navigate('/gameView', { state: { gameId } })}
+                onClick={() => {
+                    console.log("Navigating to GameView with:", { gameId, isPublic });
+                    navigate('/gameView', { state: { gameId, isPublic: isPublicState } });
+                }}
             >
                 Back
             </button>

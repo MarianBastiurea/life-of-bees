@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../App.css';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { sendSellHoneyQuantities, getHoneyQuantities } from './BeesApiService';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import { sendSellHoneyQuantities, getHoneyQuantities, getHoneyQuantitiesForPublicGame, sendSellHoneyQuantitiesFromPublicGame } from './BeesApiService';
 
 const RowHeader = () => (
     <div className="row-text">
@@ -50,13 +50,25 @@ const RowText = ({ honeyType, quantity, price, onQuantityChange }) => {
 };
 
 const SellHoney = () => {
-    const [searchParams] = useSearchParams();
-    const gameId = searchParams.get('gameId');
     const [honeyData, setHoneyData] = useState([]);
     const [soldValues, setSoldValues] = useState({});
     const [soldValueTotals, setSoldValueTotals] = useState({});
     const [totalHoneyQuantity, setTotalHoneyQuantity] = useState(0.0);
     const navigate = useNavigate();
+    const location = useLocation();
+    const { gameId, isPublic } = location.state || {};
+
+    const [isPublicState, setIsPublicState] = useState(isPublic);
+    useEffect(() => {
+        if (isPublic !== undefined) {
+            setIsPublicState(isPublic);
+        }
+    }, [isPublic]);
+
+    console.log("Received in SellHoney - gameId:", gameId, "isPublic:", isPublic);
+
+
+
 
     useEffect(() => {
         const fetchHoneyData = async () => {
@@ -66,7 +78,9 @@ const SellHoney = () => {
             }
 
             try {
-                const data = await getHoneyQuantities(gameId);
+                const data = isPublic
+                    ? await getHoneyQuantitiesForPublicGame(gameId)
+                    : await getHoneyQuantities(gameId);
                 const honeyTypeToAmount = data.honeyTypeToAmount || {};
 
                 const parsedData = Object.entries(honeyTypeToAmount).map(([honeyType, quantity]) => ({
@@ -117,9 +131,10 @@ const SellHoney = () => {
             };
 
             console.log('Payload from SellHoney:', JSON.stringify(payload, null, 2));
-
-            await sendSellHoneyQuantities.updateHoneyStock(gameId, formattedSoldData, parseFloat(totalSoldValue));
-            navigate('/gameView', { state: { gameId } });
+            const data = isPublic
+                ? await sendSellHoneyQuantitiesFromPublicGame.updateHoneyStock(gameId, formattedSoldData, parseFloat(totalSoldValue))
+                : await sendSellHoneyQuantities.updateHoneyStock(gameId, formattedSoldData, parseFloat(totalSoldValue));
+            navigate('/gameView', { state: { gameId, isPublic: isPublicState } });
         } catch (error) {
             console.error('Error submitting total sold value:', error);
         }
@@ -143,7 +158,11 @@ const SellHoney = () => {
             </div>
             <h3>Total value of honey sold: ${totalSoldValue}</h3>
             <button className="btn btn-primary mb-3" onClick={handleSubmit}>Submit</button>
-            <button className="btn btn-danger button-right-bottom" onClick={() => navigate('/gameView', { state: { gameId } })}>Back</button>
+
+            <button className="btn btn-danger button-right-bottom" onClick={() => {
+                console.log("Navigating to GameView with:", { gameId, isPublic });
+                navigate('/gameView', { state: { gameId, isPublic: isPublicState } });
+            }}>Back</button>
         </div>
     );
 };

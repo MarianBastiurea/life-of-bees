@@ -83,7 +83,7 @@ const HomePage = () => {
         });
 
         if (!isAuthenticated) {
-            console.log("AuthModal should open now");
+            console.log("AuthModal should open now in SignUp");
             setShowAuthModal(true);
         }
     };
@@ -117,6 +117,8 @@ const HomePage = () => {
         setShowPrivateModal(false);
         setShowAuthModal(false);
     };
+
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -212,10 +214,11 @@ const HomePage = () => {
                 <button
                     className="btn btn-primary btn-lg"
                     onClick={handlePrivateGameClick}
-                    disabled={!isAuthenticated}
+                    disabled={!isAuthenticated || username === "JohnDoe"}
                 >
                     Create private game
                 </button>
+
                 <div className="d-flex gap-3 ms-auto align-items-center">
                     {username && <span className="hello-user">Hello, {username}!</span>}
 
@@ -309,6 +312,7 @@ const HomePage = () => {
                     setUsername={setUsername}
                     authMessage={authMessage}
                     setIsSignUp={setIsSignUp}
+                    setFormData={setFormData}
                 />
             )}
 

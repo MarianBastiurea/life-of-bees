@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import '../App.css';
 import HiveCard from './HiveCard';
-import { getGame, iterateWeek, buyHives, getPublicGame } from './BeesApiService';
+import { getGame, iterateWeek, buyHives, getPublicGame, iteratePublicGameOneWeek, buyHivesForPublicGames } from './BeesApiService';
 import rapeseedFlower from '../flowersPhotos/rapeseed-flower.jpg';
 import wildFlower from '../flowersPhotos/wild-flower.jpg';
 import acaciaFlower from '../flowersPhotos/acacia-flower.jpg';
@@ -46,7 +46,7 @@ const GameView = () => {
                 const data = isPublic
                     ? await getPublicGame(gameId)
                     : await getGame(gameId);
-                console.log('data:', data);
+                console.log('data from fetchGameData from GameView:', data);
                 const currentDateStr = data.currentDate;
                 console.log('currentDate(string):', currentDateStr);
                 const currentDate = new Date(currentDateStr);
@@ -126,7 +126,10 @@ const GameView = () => {
             };
 
             console.log("Actions of the week being sent:", actionsOfTheWeek);
-            const response = await iterateWeek(gameId, actionsOfTheWeek);
+
+            const response = isPublic
+                ? await iteratePublicGameOneWeek(gameId, actionsOfTheWeek)
+                : await iterateWeek(gameId, actionsOfTheWeek);
 
             console.log("Response from backend:", response);
             if (response) {
@@ -156,25 +159,6 @@ const GameView = () => {
         }
     };
 
-    /* const handleHarvestHoneyChange = (hiveId) => {
-         setSelectedActions((prevSelectedActions) => {
-             const newSelectedActions = { ...prevSelectedActions };
-             const harvestKey = `HARVEST_HONEY-${hiveId}`;
-             const isHarvesting = !newSelectedActions[harvestKey];
- 
- 
-             newSelectedActions[harvestKey] = isHarvesting;
- 
-             if (isHarvesting) {
-                 newSelectedActions[`ADD_EGGS_FRAME-${hiveId}`] = false;
-                 newSelectedActions[`ADD_HONEY_FRAME-${hiveId}`] = false;
-                 newSelectedActions[`SPLIT_HIVE-${hiveId}`] = false;
-             }
- 
-             return newSelectedActions;
-         });
-     };
- */
 
     const processBackendResponse = (response) => {
 
@@ -253,11 +237,17 @@ const GameView = () => {
 
         try {
             const gameId = gameData.id;
-            const response = await buyHives(gameId, hivesToBuy);
+            const response = isPublic
+                ? await buyHivesForPublicGames(gameId, hivesToBuy)
+                : await buyHives(gameId, hivesToBuy);
             if (response) {
                 setShowBuyHivesForm(false);
                 setError(null);
-                setGameData(await getGame(gameId));
+                const data = isPublic
+                    ? await getPublicGame(gameId)
+                    : await getGame(gameId);
+
+                setGameData(data);
             } else {
                 setError('Failed to buy hives.');
             }
@@ -284,8 +274,8 @@ const GameView = () => {
             console.error("gameId is missing");
             return;
         }
-        console.log("Navigating to HiveHistory with gameId:", gameId, "and hiveId:", hiveId);
-        navigate('/HiveHistory', { state: { gameId: gameId, hiveId: hiveId } });
+        console.log("Navigating to HiveHistory with gameId:", gameId, "and hiveId:", hiveId, " isPublic ", isPublic);
+        navigate('/HiveHistory', { state: { gameId: gameId, hiveId: hiveId, isPublic: isPublic } });
     };
 
     const goToApiaryHistory = (gameId) => {
@@ -293,8 +283,8 @@ const GameView = () => {
             console.error("gameId is missing");
             return;
         }
-        console.log("Navigating to ApiaryHistory with gameId:", gameId);
-        navigate('/ApiaryHistory', { state: { gameId: gameId } });
+        console.log("Navigating to ApiaryHistory with gameId:", gameId, "and IsPublic", isPublic);
+        navigate('/ApiaryHistory', { state: { gameId: gameId, isPublic: isPublic } });
     };
 
     return (
@@ -318,11 +308,15 @@ const GameView = () => {
                                         <button
                                             key={hive.id}
                                             className="col-md-6 mb-3 btn btn-outline-primary"
-                                            onClick={() => goToHiveHistory(hive.id)}
+                                            onClick={() => {
+                                                console.log("Navigating to HiveHistory with:", { gameId, isPublic });
+                                                goToHiveHistory(hive.id);
+                                            }}
                                             style={{ cursor: 'pointer', textAlign: 'left', border: 'none', background: 'none' }}
                                         >
                                             <HiveCard hive={hive} />
                                         </button>
+
                                     ))
                                 ) : (
                                     <p>No hives available or data not loaded yet.</p>
@@ -341,7 +335,7 @@ const GameView = () => {
                         <div className="col-md-3">
                             <div className="card mb-3">
                                 <div className="card-body">
-                                    {console.log("Updated game data:", updatedGameData)}
+                                    {console.log("Updated game data in actions column:", updatedGameData)}
 
                                     {removedHiveMessage && <p>{removedHiveMessage}</p>}
                                     {updatedGameData && updatedGameData.actions && updatedGameData.actions.actions ? (
@@ -499,10 +493,11 @@ const GameView = () => {
 
                                 <button
                                     className="btn btn-custom p-custom mb-2"
-                                    onClick={() => navigate(`/sell-honey?gameId=${gameId}`)}
+                                    onClick={() => navigate('/sell-honey', { state: { gameId, isPublic } })}
                                 >
                                     Sell Honey
                                 </button>
+
 
 
                                 <div style={{ position: "relative", display: "inline-block", textAlign: "center" }}>

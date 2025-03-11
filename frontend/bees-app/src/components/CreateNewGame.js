@@ -156,7 +156,7 @@ const NewGameModal = ({ handleClose, gameType, userId, username }) => {
                                 </div>
                             </div>
                             <div className="d-flex justify-content-between">
-                                <button type="button" className="btn btn-danger" onClick={handleClose}>Close</button>
+                                <button type="button" className="btn btn-danger" onClick={handleClose}>Cancel</button>
                                 <button type="submit" className="btn btn-success">Start</button>
                             </div>
                         </form>
