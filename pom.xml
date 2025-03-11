@@ -22,7 +22,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
-    <java.version>21</java.version>
+    <java.version>23</java.version>
     <start-class>com.marianbastiurea.lifeofbees.LifeOfBeesApplication</start-class>
     <REACT_APP_API_BASE_URL>http://localhost:8080</REACT_APP_API_BASE_URL>
   </properties>
