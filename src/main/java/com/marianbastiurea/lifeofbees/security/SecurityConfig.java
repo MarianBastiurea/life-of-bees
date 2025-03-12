@@ -46,7 +46,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/", "/index.html", "/static/**", "/api/bees/**", "/favicon.png", "/manifest.json",
                                     "/api/auth/register", "/api/auth/signin", "/oauth2/**",
                                     "api/auth/google-client-id", "/api/auth/oauth/google"
-                                     , "api/bees/PublicGames").permitAll()
+                                    , "api/bees/PublicGames").permitAll()
                             .anyRequest().authenticated();
                 })
                 .oauth2Login(Customizer.withDefaults())
@@ -65,7 +65,7 @@ public class SecurityConfig {
                         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
                     });
                 })
-               .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         System.out.println("SecurityFilterChain configuration completed in SecurityConfig.");
         return http.build();

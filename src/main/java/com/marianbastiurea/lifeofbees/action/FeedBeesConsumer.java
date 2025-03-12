@@ -2,7 +2,8 @@ package com.marianbastiurea.lifeofbees.action;
 
 import com.marianbastiurea.lifeofbees.bees.Hive;
 import com.marianbastiurea.lifeofbees.game.LifeOfBees;
-import static com.marianbastiurea.lifeofbees.bees.ApiaryParameters.*;
+
+import static com.marianbastiurea.lifeofbees.bees.ApiaryParameters.pricePerHiveToFeedBees;
 
 public class FeedBeesConsumer implements ActionOfTheWeekConsumer<String> {
 

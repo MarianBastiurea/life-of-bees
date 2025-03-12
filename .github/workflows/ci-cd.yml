@@ -30,7 +30,7 @@ jobs:
           mvn package spring-boot:repackage -X -DREACT_APP_API_BASE_URL=https://lifeofbees.co.uk
         env:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          
+
       # Step 4: Build Docker Image
       - name: Build Docker Image
         run: |

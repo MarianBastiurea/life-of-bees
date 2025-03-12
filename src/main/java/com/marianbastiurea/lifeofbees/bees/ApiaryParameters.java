@@ -13,8 +13,8 @@ public class ApiaryParameters {
     public final static int maxEggsDailyLaidByQueen = 2000;
     public final static int daysToLiveForABee = 30;
     public final static double percentOfBeesDiedDueToHibernate = 0.3;
-    public final static int priceOfAHive=500;
-    public  final static int pricePerHiveToFeedBees=10;
-    public  final static int pricePerHiveToPerformInsectControl=10;
+    public final static int priceOfAHive = 500;
+    public final static int pricePerHiveToFeedBees = 10;
+    public final static int pricePerHiveToPerformInsectControl = 10;
 
 }

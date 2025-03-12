@@ -49,7 +49,7 @@ public class BeeTime {
     public HoneyType honeyType() {
         Month month = currentDate.getMonth();
         int dayOfMonth = currentDate.getDayOfMonth();
-        System.out.println("luna este: "+month+" si siua este: "+dayOfMonth);
+        System.out.println("luna este: " + month + " si siua este: " + dayOfMonth);
         return switch (month) {
             case MARCH, AUGUST, SEPTEMBER -> HoneyType.WildFlower;
             case APRIL -> dayOfMonth <= 20
