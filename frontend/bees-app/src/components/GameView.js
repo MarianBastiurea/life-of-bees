@@ -42,10 +42,7 @@ const GameView = () => {
         async function fetchGameData() {
             try {
                 console.log('data for  ID:', gameId);
-
-                const data = isPublic
-                    ? await getPublicGame(gameId)
-                    : await getGame(gameId);
+                const data = await getGame(gameId);
                 console.log('data from fetchGameData from GameView:', data);
                 const currentDateStr = data.currentDate;
                 console.log('currentDate(string):', currentDateStr);
@@ -127,9 +124,7 @@ const GameView = () => {
 
             console.log("Actions of the week being sent:", actionsOfTheWeek);
 
-            const response = isPublic
-                ? await iteratePublicGameOneWeek(gameId, actionsOfTheWeek)
-                : await iterateWeek(gameId, actionsOfTheWeek);
+            const response = await iterateWeek(gameId, actionsOfTheWeek);
 
             console.log("Response from backend:", response);
             if (response) {
@@ -237,15 +232,11 @@ const GameView = () => {
 
         try {
             const gameId = gameData.id;
-            const response = isPublic
-                ? await buyHivesForPublicGames(gameId, hivesToBuy)
-                : await buyHives(gameId, hivesToBuy);
+            const response = await buyHives(gameId, hivesToBuy);
             if (response) {
                 setShowBuyHivesForm(false);
                 setError(null);
-                const data = isPublic
-                    ? await getPublicGame(gameId)
-                    : await getGame(gameId);
+                const data = await getGame(gameId);
 
                 setGameData(data);
             } else {
@@ -274,8 +265,8 @@ const GameView = () => {
             console.error("gameId is missing");
             return;
         }
-        console.log("Navigating to HiveHistory with gameId:", gameId, "and hiveId:", hiveId, " isPublic ", isPublic);
-        navigate('/HiveHistory', { state: { gameId: gameId, hiveId: hiveId, isPublic: isPublic } });
+        console.log("Navigating to HiveHistory with gameId:", gameId, "and hiveId:", hiveId);
+        navigate('/HiveHistory', { state: { gameId: gameId, hiveId: hiveId } });
     };
 
     const goToApiaryHistory = (gameId) => {
@@ -283,8 +274,8 @@ const GameView = () => {
             console.error("gameId is missing");
             return;
         }
-        console.log("Navigating to ApiaryHistory with gameId:", gameId, "and IsPublic", isPublic);
-        navigate('/ApiaryHistory', { state: { gameId: gameId, isPublic: isPublic } });
+        console.log("Navigating to ApiaryHistory with gameId:", gameId);
+        navigate('/ApiaryHistory', { state: { gameId: gameId } });
     };
 
     return (
@@ -309,7 +300,7 @@ const GameView = () => {
                                             key={hive.id}
                                             className="col-md-6 mb-3 btn btn-outline-primary"
                                             onClick={() => {
-                                                console.log("Navigating to HiveHistory with:", { gameId, isPublic });
+                                                console.log("Navigating to HiveHistory with:", { gameId });
                                                 goToHiveHistory(hive.id);
                                             }}
                                             style={{ cursor: 'pointer', textAlign: 'left', border: 'none', background: 'none' }}
@@ -458,8 +449,6 @@ const GameView = () => {
                         </div>
 
 
-
-
                         <div className="col-md-3">
                             <div className="d-flex flex-column align-items-center">
                                 <p className="btn-custom p-custom mb-2">Date: {gameData ? gameData.currentDate : 'Loading...'}</p>
@@ -493,12 +482,10 @@ const GameView = () => {
 
                                 <button
                                     className="btn btn-custom p-custom mb-2"
-                                    onClick={() => navigate('/sell-honey', { state: { gameId, isPublic } })}
+                                    onClick={() => navigate('/sell-honey', { state: { gameId } })}
                                 >
                                     Sell Honey
                                 </button>
-
-
 
                                 <div style={{ position: "relative", display: "inline-block", textAlign: "center" }}>
                                     <button

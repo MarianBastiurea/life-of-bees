@@ -4,20 +4,11 @@ import { getHiveHistory } from './BeesApiService';
 
 const HiveHistory = () => {
     const location = useLocation();
-    const { gameId, hiveId, isPublic } = location.state || {};
-
+    const { gameId, hiveId } = location.state || {};
     const [hiveHistoryData, setHiveHistoryData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
-    const [isPublicState, setIsPublicState] = useState(isPublic);
-
-    useEffect(() => {
-        if (isPublic !== undefined) {
-            setIsPublicState(isPublic);
-        }
-    }, [isPublic]);
-
 
     useEffect(() => {
         if (!gameId || !hiveId) {
@@ -31,7 +22,6 @@ const HiveHistory = () => {
             try {
                 const data = await getHiveHistory(gameId, hiveId);
                 console.log('Data', data)
-                console.log('isPublic', isPublic)
                 console.log("Location state:", location.state);
                 setHiveHistoryData(data);
             } catch (err) {
@@ -114,8 +104,8 @@ const HiveHistory = () => {
             <button
                 className="btn btn-danger mt-3 float-end"
                 onClick={() => {
-                    console.log("Navigating to GameView with:", { gameId, isPublic });
-                    navigate('/gameView', { state: { gameId, isPublic: isPublicState } });
+                    console.log("Navigating to GameView with:", { gameId });
+                    navigate('/gameView', { state: { gameId } });
                 }}
             >
                 Back

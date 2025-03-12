@@ -96,16 +96,6 @@ export const getGame = async (gameId) => {
     }
 };
 
-export const getPublicGame = async (gameId) => {
-    try {
-        const response = await apiClient.get(`/bees/publicGame/${gameId}`);
-        return response.data;
-    } catch (error) {
-        console.error('Error getting public game data:', error);
-        throw error;
-    }
-};
-
 
 export const iterateWeek = async (gameId, requestData) => {
     try {
@@ -120,16 +110,6 @@ export const iterateWeek = async (gameId, requestData) => {
 };
 
 
-export const iteratePublicGameOneWeek = async (gameId, requestData) => {
-    try {
-        const response = await apiClient.post(`/bees/iteratePublicGame/${gameId}`, requestData);
-        return response.data;
-    } catch (error) {
-        console.error('Error iterating week:', error);
-        throw error;
-    }
-};
-
 export const getHoneyQuantities = async (gameId) => {
     try {
         const response = await apiClient.get(`/bees/getHoneyQuantities/${gameId}`);
@@ -141,15 +121,6 @@ export const getHoneyQuantities = async (gameId) => {
 };
 
 
-export const getHoneyQuantitiesForPublicGame = async (gameId) => {
-    try {
-        const response = await apiClient.get(`/bees/getHoneyQuantitiesForPublicGame/${gameId}`);
-        return response.data;
-    } catch (error) {
-        console.error('Error sending honeyQuantities:', error);
-        throw error;
-    }
-};
 
 
 export const sendSellHoneyQuantities = {
@@ -170,22 +141,6 @@ export const sendSellHoneyQuantities = {
 };
 
 
-export const sendSellHoneyQuantitiesFromPublicGame = {
-    updateHoneyStock: async (gameId, honeyTypeToAmount, totalValue) => {
-        try {
-            const payload = {
-                honeyTypeToAmount,
-                totalValue,
-            };
-            console.log('Payload din BeesApiService:', JSON.stringify(payload, null, 2));
-            const response = await apiClient.post(`/bees/sellHoneyFromPublicGame/${gameId}`, payload);
-            return response.data;
-        } catch (error) {
-            console.error('Error sending SellHoneyQuantities:', error);
-            throw error;
-        }
-    },
-};
 
 export const buyHives = async (gameId, numberOfHives) => {
     try {
@@ -200,19 +155,6 @@ export const buyHives = async (gameId, numberOfHives) => {
     }
 };
 
-
-export const buyHivesForPublicGames = async (gameId, numberOfHives) => {
-    try {
-        console.log("Number of hives to buy:", numberOfHives);
-        const response = await apiClient.post(`/bees/buyHivesForPublicGames/${gameId}`, { numberOfHives }, {
-            headers: { 'Content-Type': 'application/json' }
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Error buying hives:', error);
-        throw error;
-    }
-};
 
 export const fetchLocations = async (query) => {
     const apiKey = 'tiMHwUADw1sxyLnOfrbf2a6oyXhRHFBe';
