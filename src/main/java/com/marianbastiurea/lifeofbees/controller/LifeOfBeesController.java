@@ -63,7 +63,8 @@ public class LifeOfBeesController {
     }
 
     private static void accessDenied(LifeOfBees lifeOfBeesGame, String userId) {
-        if (!lifeOfBeesGame.getUserId().equals(userId)) {
+        String gameType = lifeOfBeesGame.getGameType();
+        if ("private".equals(gameType) && !lifeOfBeesGame.getUserId().equals(userId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied");
         }
     }
@@ -113,11 +114,8 @@ public class LifeOfBeesController {
         logger.info("Received request for game: {}", gameId);
         LifeOfBees lifeOfBeesGame = lifeOfBeesService.getByGameId(gameId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found"));
-        String gameType= lifeOfBeesGame.getGameType();
-        if ("private".equals(gameType)){
         String userId = principal.getName();
         accessDenied(lifeOfBeesGame, userId);
-        }
         GameResponse response = getGameResponse(lifeOfBeesGame);
         logger.info("Game sent to React from getGame: {}", response);
         return response;
@@ -132,11 +130,8 @@ public class LifeOfBeesController {
         LifeOfBees lifeOfBeesGame = lifeOfBeesService.getByGameId(gameId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found"));
         List<WeatherData> weatherDataNextWeek = weatherService.getWeatherForNextWeek(lifeOfBeesGame.getApiary().getHives().getCurrentDate());
-        String gameType= lifeOfBeesGame.getGameType();
-        if ("private".equals(gameType)){
-            String userId = principal.getName();
-            accessDenied(lifeOfBeesGame, userId);
-        }
+        String userId = principal.getName();
+        accessDenied(lifeOfBeesGame, userId);
         Map<ActionType, Object> actions = requestData.get("actions");
         if (actions == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing 'actions' data in request");
@@ -176,11 +171,8 @@ public class LifeOfBeesController {
         LifeOfBees lifeOfBeesGame = lifeOfBeesService.getByGameId(gameId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found"));
         logger.info("This is the game received to extract honey harvested: {}", lifeOfBeesGame);
-        String gameType= lifeOfBeesGame.getGameType();
-        if ("private".equals(gameType)){
-            String userId = principal.getName();
-            accessDenied(lifeOfBeesGame, userId);
-        }
+        String userId = principal.getName();
+        accessDenied(lifeOfBeesGame, userId);
         Apiary apiary = lifeOfBeesGame.getApiary();
         apiary.honeyHarvestedByHoneyType();
         HarvestHoney honeyData = apiary.getTotalHarvestedHoney();
@@ -196,12 +188,8 @@ public class LifeOfBeesController {
 
         LifeOfBees lifeOfBeesGame = lifeOfBeesService.getByGameId(gameId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found"));
-
-        String gameType= lifeOfBeesGame.getGameType();
-        if ("private".equals(gameType)){
-            String userId = principal.getName();
-            accessDenied(lifeOfBeesGame, userId);
-        }
+        String userId = principal.getName();
+        accessDenied(lifeOfBeesGame, userId);
         double revenue = 0.0;
         if (requestData.totalValue != null) {
             revenue = Double.parseDouble(requestData.totalValue.toString());
@@ -231,11 +219,8 @@ public class LifeOfBeesController {
         logger.info("Request to buy hives in game:  {}", gameId);
         LifeOfBees lifeOfBeesGame = lifeOfBeesService.getByGameId(gameId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found"));
-        String gameType= lifeOfBeesGame.getGameType();
-        if ("private".equals(gameType)){
-            String userId = principal.getName();
-            accessDenied(lifeOfBeesGame, userId);
-        }
+        String userId = principal.getName();
+        accessDenied(lifeOfBeesGame, userId);
         Integer numberOfHives = request.get("numberOfHives");
         int totalCost = numberOfHives * priceOfAHive;
         if (totalCost < lifeOfBeesGame.getMoneyInTheBank()) {
@@ -247,7 +232,6 @@ public class LifeOfBeesController {
         logger.info("new {} hives was added to apiary in game: {}", numberOfHives, gameId);
         return ResponseEntity.ok("Hives bought successfully.");
     }
-
 
 
     @GetMapping("/PublicGames")
