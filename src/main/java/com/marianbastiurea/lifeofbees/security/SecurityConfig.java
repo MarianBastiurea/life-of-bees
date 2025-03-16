@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     System.out.println("Setting up authorization rules in SecurityConfig...");
                     auth.requestMatchers("/", "/index.html", "/static/**", "/api/bees/**", "/favicon.png", "/manifest.json",
-                                    "/api/auth/register", "/api/auth/signin", "/oauth2/**",
+                                    "/api/auth/register", "/api/auth/signIn", "/oauth2/**",
                                     "api/auth/google-client-id", "/api/auth/oauth/google"
                                     , "api/bees/PublicGames").permitAll()
                             .anyRequest().authenticated();

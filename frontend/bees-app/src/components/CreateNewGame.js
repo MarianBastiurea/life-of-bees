@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createGame, fetchLocations, fetchWeatherForStartDate, getGame } from './BeesApiService';
+import { createGame, fetchLocations, getGame } from './BeesApiService';
 
 
 const NewGameModal = ({ handleClose, gameType, userId, username }) => {

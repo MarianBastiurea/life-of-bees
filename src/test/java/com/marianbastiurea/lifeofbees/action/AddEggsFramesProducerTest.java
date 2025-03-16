@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
-import static com.marianbastiurea.lifeofbees.bees.ApiaryParameters.fullnessFactor;
-import static com.marianbastiurea.lifeofbees.bees.ApiaryParameters.maxNumberOfEggFrames;
+import static com.marianbastiurea.lifeofbees.bees.ApiaryParameters.FULLNESS_FACTOR;
+import static com.marianbastiurea.lifeofbees.bees.ApiaryParameters.MAX_NUMBER_OF_EGG_FRAMES;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AddEggsFramesProducerTest {
@@ -24,7 +24,7 @@ class AddEggsFramesProducerTest {
 
     @Test
     void cantAddEggFrameToHiveWithMaxNumberOfEggFramesAndFullnessOverFullnessFactor() {
-        Hives hives = new Hives(new Hive(1, new EggFrames(maxNumberOfEggFrames, fullnessFactor + 0.1)));
+        Hives hives = new Hives(new Hive(1, new EggFrames(MAX_NUMBER_OF_EGG_FRAMES, FULLNESS_FACTOR + 0.1)));
 
         Optional<List<Integer>> result = addEggsFramesProducer.produce(hives);
 
@@ -34,11 +34,11 @@ class AddEggsFramesProducerTest {
     @Test
     void addEggsFramesProducer_mixed_cases() {
         Hives hives = new Hives(
-                new Hive(1, new EggFrames(maxNumberOfEggFrames, fullnessFactor + 0.1)),
-                new Hive(2, new EggFrames(maxNumberOfEggFrames, fullnessFactor - 0.1)),
-                new Hive(3, new EggFrames(maxNumberOfEggFrames - 1, fullnessFactor)),
-                new Hive(4, new EggFrames(maxNumberOfEggFrames - 2, fullnessFactor + 0.1)),
-                new Hive(5, new EggFrames(maxNumberOfEggFrames - 1, fullnessFactor - 0.1)
+                new Hive(1, new EggFrames(MAX_NUMBER_OF_EGG_FRAMES, FULLNESS_FACTOR + 0.1)),
+                new Hive(2, new EggFrames(MAX_NUMBER_OF_EGG_FRAMES, FULLNESS_FACTOR - 0.1)),
+                new Hive(3, new EggFrames(MAX_NUMBER_OF_EGG_FRAMES - 1, FULLNESS_FACTOR)),
+                new Hive(4, new EggFrames(MAX_NUMBER_OF_EGG_FRAMES - 2, FULLNESS_FACTOR + 0.1)),
+                new Hive(5, new EggFrames(MAX_NUMBER_OF_EGG_FRAMES - 1, FULLNESS_FACTOR - 0.1)
                 ));
 
         Optional<List<Integer>> result = addEggsFramesProducer.produce(hives);

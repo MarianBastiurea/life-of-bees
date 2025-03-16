@@ -26,7 +26,7 @@ class HivesTest {
                         new EggFrames(6, 1.0),
                         new HoneyFrames(6, 4),
                         new BeesBatches(200),
-                        new ArrayList<>(List.of(new HoneyBatch(1, 10.0, HoneyType.Acacia, false))),
+                        new ArrayList<>(List.of(new HoneyBatch(1, 10.0, HoneyType.ACACIA, false))),
                         new Queen(2)),
                 new Hive(5));
 

@@ -173,10 +173,6 @@ public class Hive {
         return honeyBatches;
     }
 
-    /* use for test only
-public List<HoneyBatch> getHoneyBatches() {
-    return new ArrayList<>(honeyBatches);
-} */
 
     public void setHoneyBatches(List<HoneyBatch> honeyBatches) {
         this.honeyBatches = honeyBatches;

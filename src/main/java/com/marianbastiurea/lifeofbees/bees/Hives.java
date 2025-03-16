@@ -9,8 +9,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.marianbastiurea.lifeofbees.bees.ApiaryParameters.daysToLiveForABee;
-import static com.marianbastiurea.lifeofbees.bees.ApiaryParameters.maxNumberOfEggFrames;
+import static com.marianbastiurea.lifeofbees.bees.ApiaryParameters.DAYS_TO_LIVE_FOR_A_BEE;
+import static com.marianbastiurea.lifeofbees.bees.ApiaryParameters.MAX_NUMBER_OF_EGG_FRAMES;
 
 public class Hives {
     private static final Logger logger = LoggerFactory.getLogger(Hives.class);
@@ -115,10 +115,10 @@ public class Hives {
                 })
                 .flatMap(sourceHive -> hives.stream()
                         .filter(targetHive -> targetHive.itWasSplit
-                                && targetHive.getEggFrames().getNumberOfEggFrames() < maxNumberOfEggFrames)
-                        .map(targetHive -> {
-                            return new MoveEggFramePairHives(sourceHive.getId(), targetHive.getId());
-                        })
+                                && targetHive.getEggFrames().getNumberOfEggFrames() < MAX_NUMBER_OF_EGG_FRAMES)
+                        .map(targetHive ->
+                                new MoveEggFramePairHives(sourceHive.getId(), targetHive.getId())
+                        )
                 )
                 .collect(Collectors.toList());
         logger.debug("Finishing checkIfCanMoveAnEggsFrame...");
@@ -191,8 +191,8 @@ public class Hives {
         List<Hive> hiveList = IntStream.rangeClosed(1, numberOfHives).mapToObj(i -> {
             logger.debug("Creating hive with id = {}", i);
             BeesBatches beesBatches = new BeesBatches(
-                    IntStream.range(0, daysToLiveForABee)
-                            .mapToObj(k -> randomParameters.numberOfBees())
+                    IntStream.range(0, DAYS_TO_LIVE_FOR_A_BEE)
+                            .mapToObj(_ -> randomParameters.numberOfBees())
                             .collect(Collectors.toCollection(LinkedList::new))
             );
             Hive hive = new Hive(

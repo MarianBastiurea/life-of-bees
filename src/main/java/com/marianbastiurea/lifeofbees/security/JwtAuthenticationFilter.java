@@ -42,7 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
         } else {
-            System.out.println("Headerul Authorization is not valid.");
+            System.out.println("Authorization Heather is not valid.");
         }
         filterChain.doFilter(request, response);
     }
@@ -61,7 +61,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private boolean isPublicRoute(String path) {
-        return path.equals("/api/auth/register") || path.equals("/api/auth/signin")
+        return path.equals("/api/auth/register") || path.equals("/api/auth/signIn")
                 || path.equals("/")
                 || path.equals("/index.html")
                 || path.equals("/favicon.png")
@@ -75,7 +75,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(userId, null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        System.out.println("Authentification for userId: " + userId);
+        System.out.println("Authentication for userId: " + userId);
     }
 
     private void handleInvalidToken(HttpServletResponse response) throws IOException {

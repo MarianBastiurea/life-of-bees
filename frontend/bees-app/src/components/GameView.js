@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import '../App.css';
 import HiveCard from './HiveCard';
-import { getGame, iterateWeek, buyHives, getPublicGame, iteratePublicGameOneWeek, buyHivesForPublicGames } from './BeesApiService';
+import { getGame, iterateWeek, buyHives } from './BeesApiService';
 import rapeseedFlower from '../flowersPhotos/rapeseed-flower.jpg';
 import wildFlower from '../flowersPhotos/wild-flower.jpg';
 import acaciaFlower from '../flowersPhotos/acacia-flower.jpg';
@@ -29,8 +29,7 @@ const GameView = () => {
     const endGameDate = new Date();
     const [gameEnded, setGameEnded] = useState(false);
     const location = useLocation();
-    const isPublic = location.state?.isPublic || false;
-    const [disabledActions, setDisabledActions] = useState({});
+
 
 
     useEffect(() => {
@@ -78,9 +77,6 @@ const GameView = () => {
             [`${actionType}-${hiveId}`]: !prevSelectedActions[`${actionType}-${hiveId}`],
         }));
     };
-
-
-
 
     const showRemovedHiveMessage = (removedHiveId) => {
         setRemovedHiveMessage(`Hive with ID ${removedHiveId} has been removed.`);

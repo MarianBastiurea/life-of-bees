@@ -3,9 +3,8 @@ package com.marianbastiurea.lifeofbees.bees;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 
-import static com.marianbastiurea.lifeofbees.bees.ApiaryParameters.maxNumberOfHoneyFrames;
+import static com.marianbastiurea.lifeofbees.bees.ApiaryParameters.MAX_NUMBER_OF_HONEY_FRAMES;
 
 public class HoneyFrames {
 
@@ -28,10 +27,9 @@ public class HoneyFrames {
     }
 
     public static HoneyFrames getRandomHoneyFrames() {
-        Random random = new Random();
         HoneyFrames honeyFrames = new HoneyFrames(new ArrayList<>());
         for (int k = 0; k < randomParameters.numberOfHoneyFrames(); k++) {
-            honeyFrames.getHoneyFrame().add(new HoneyFrame(random.nextDouble(2.5, 3)));
+            honeyFrames.getHoneyFrame().add(new HoneyFrame(randomParameters.kgOfHoney()));
         }
         return honeyFrames;
     }
@@ -49,7 +47,7 @@ public class HoneyFrames {
         long honeyFrameFull = getHoneyFrame().stream()
                 .filter(HoneyFrame::isHarvestable)
                 .count();
-        return getHoneyFrame().size() < maxNumberOfHoneyFrames && honeyFrameFull == getHoneyFrame().size();
+        return getHoneyFrame().size() < MAX_NUMBER_OF_HONEY_FRAMES && honeyFrameFull == getHoneyFrame().size();
     }
 
     public void addNewHoneyFrameInHive() {
@@ -76,7 +74,7 @@ public class HoneyFrames {
     public HoneyFrames splitHoneyFrames() {
         HoneyFrames newHiveHoneyFrames = new HoneyFrames(new ArrayList<>());
         for (int i = 0; i < 2; i++) {
-            HoneyFrame frameToMove = getHoneyFrame().remove(getHoneyFrame().size() - 1);
+            HoneyFrame frameToMove = getHoneyFrame().removeLast();
             newHiveHoneyFrames.getHoneyFrame().add(frameToMove);
         }
         return newHiveHoneyFrames;
@@ -84,8 +82,8 @@ public class HoneyFrames {
 
     public void hibernateHoneyFrames() {
         if (honeyFrame.size() > 1) {
-            honeyFrame.remove(honeyFrame.size() - 1);
-            honeyFrame.remove(honeyFrame.size() - 1);
+            honeyFrame.removeLast();
+            honeyFrame.removeLast();
         }
     }
 

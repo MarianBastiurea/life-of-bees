@@ -29,7 +29,7 @@ class HarvestHoneyConsumerTest {
         harvestHoneyConsumer.accept(initialHive, Collections.singletonList(1));
         System.out.println("Hives dupa: " + initialHive);
         assertEquals(initialHive, new Hives(Collections.singletonList(new Hive(1, afterHarvestingHoneyFrames,
-                List.of(new HoneyBatch(1, 4.0, HoneyType.Acacia, false)), true)), new BeeTime(2023, 5, 15)));
+                List.of(new HoneyBatch(1, 4.0, HoneyType.ACACIA, false)), true)), new BeeTime(2023, 5, 15)));
 
     }
 
@@ -48,11 +48,11 @@ class HarvestHoneyConsumerTest {
                 new HoneyFrame(3.8)));
 
         List<HoneyBatch> acaciaHoneyBatches = List.of(
-                new HoneyBatch(1, 17.5, HoneyType.Acacia, false));
+                new HoneyBatch(1, 17.5, HoneyType.ACACIA, false));
 
         List<HoneyBatch> doubleAcaciaHoneyBatches = List.of(
-                new HoneyBatch(1, 17.5, HoneyType.Acacia, false),
-                new HoneyBatch(1, 13.5, HoneyType.Acacia, false));
+                new HoneyBatch(1, 17.5, HoneyType.ACACIA, false),
+                new HoneyBatch(1, 13.5, HoneyType.ACACIA, false));
 
         Hives initialHive = new Hives(Collections.singletonList(new Hive(1, beforeHarvestingHoneyFrames, acaciaHoneyBatches, false)), new BeeTime(2023, 5, 15));
         harvestHoneyConsumer.accept(initialHive, Collections.singletonList(1));
@@ -76,11 +76,11 @@ class HarvestHoneyConsumerTest {
                 new HoneyFrame(3.8)));
 
         List<HoneyBatch> acaciaHoneyBatches = List.of(
-                new HoneyBatch(1, 17.5, HoneyType.Acacia, false));
+                new HoneyBatch(1, 17.5, HoneyType.ACACIA, false));
 
         List<HoneyBatch> doubleDifferentHoneyTypeHoneyBatches = List.of(
-                new HoneyBatch(1, 17.5, HoneyType.Acacia, false),
-                new HoneyBatch(1, 13.5, HoneyType.Rapeseed, false));
+                new HoneyBatch(1, 17.5, HoneyType.ACACIA, false),
+                new HoneyBatch(1, 13.5, HoneyType.RAPESEED, false));
         Hives initialHive = new Hives(Collections.singletonList(new Hive(1, beforeHarvestingHoneyFrames, acaciaHoneyBatches, false)), new BeeTime(2023, 4, 15));
         harvestHoneyConsumer.accept(initialHive, Collections.singletonList(1));
         Hives afterHarvestingHive = new Hives(Collections.singletonList(new Hive(1, afterHarvestingHoneyFrames, doubleDifferentHoneyTypeHoneyBatches, true)), new BeeTime(2023, 4, 15));

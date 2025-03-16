@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class GameHistory {
 
     @Id
-    private String gameHistoryId;
     private String gameId;
     private LifeOfBees gameHistory;
 
@@ -18,10 +17,6 @@ public class GameHistory {
     public GameHistory(String gameId, LifeOfBees gameHistory) {
         this.gameId = gameId;
         this.gameHistory = gameHistory;
-    }
-
-    public String getGameHistoryId() {
-        return gameHistoryId;
     }
 
     public String getGameId() {
@@ -39,7 +34,6 @@ public class GameHistory {
     @Override
     public String toString() {
         return "GameHistory{" +
-                "gameHistoryId='" + gameHistoryId + '\'' +
                 ", gameId='" + gameId + '\'' +
                 ", gameHistory=" + gameHistory +
                 '}';

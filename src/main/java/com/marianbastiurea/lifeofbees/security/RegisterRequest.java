@@ -7,15 +7,14 @@ public class RegisterRequest {
 
     private String email;
     private String provider;
-    private String providerId;
 
-    public RegisterRequest(String username, String password, String confirmPassword, String email, String provider, String providerId) {
+
+    public RegisterRequest(String username, String password, String confirmPassword, String email, String provider) {
         this.username = username;
         this.password = password;
         this.confirmPassword = confirmPassword;
         this.email = email;
         this.provider = provider;
-        this.providerId = providerId;
     }
 
     public String getEmail() {
@@ -32,14 +31,6 @@ public class RegisterRequest {
 
     public void setProvider(String provider) {
         this.provider = provider;
-    }
-
-    public String getProviderId() {
-        return providerId;
-    }
-
-    public void setProviderId(String providerId) {
-        this.providerId = providerId;
     }
 
     public String getUsername() {

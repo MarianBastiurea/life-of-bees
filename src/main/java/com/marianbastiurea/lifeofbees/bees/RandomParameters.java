@@ -41,6 +41,10 @@ public class RandomParameters {
         return random.nextInt(1, 6);
     }
 
+    public double kgOfHoney() {
+        return random.nextDouble(2.5, 3);
+    }
+
     public List<Integer> getRandomEggCounts(int count) {
         return random.ints(count, 800, 901)
                 .boxed()
@@ -50,8 +54,7 @@ public class RandomParameters {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        return true;
+        return o != null && getClass() == o.getClass();
     }
 
     @Override

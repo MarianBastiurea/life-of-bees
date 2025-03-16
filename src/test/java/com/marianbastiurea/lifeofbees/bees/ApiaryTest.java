@@ -15,29 +15,29 @@ class ApiaryTest {
 
         List<Hive> hiveList = Arrays.asList(
                 new Hive(1, new ArrayList<>(Arrays.asList(
-                        new HoneyBatch(1, 5.5, HoneyType.SunFlower, false),
-                        new HoneyBatch(1, 5.5, HoneyType.Acacia, false),
-                        new HoneyBatch(1, 4.5, HoneyType.Rapeseed, false),
-                        new HoneyBatch(1, 5.5, HoneyType.Linden, false),
-                        new HoneyBatch(1, 4.5, HoneyType.WildFlower, false),
-                        new HoneyBatch(1, 4.5, HoneyType.FalseIndigo, false)
+                        new HoneyBatch(1, 5.5, HoneyType.SUNFLOWER, false),
+                        new HoneyBatch(1, 5.5, HoneyType.ACACIA, false),
+                        new HoneyBatch(1, 4.5, HoneyType.RAPESEED, false),
+                        new HoneyBatch(1, 5.5, HoneyType.LINDEN, false),
+                        new HoneyBatch(1, 4.5, HoneyType.WILD_FLOWER, false),
+                        new HoneyBatch(1, 4.5, HoneyType.FALSE_INDIGO, false)
                 ))),
                 new Hive(2, new ArrayList<>(Arrays.asList(
-                        new HoneyBatch(1, 5.5, HoneyType.SunFlower, false),
-                        new HoneyBatch(1, 5.5, HoneyType.Acacia, false),
-                        new HoneyBatch(1, 4.5, HoneyType.Rapeseed, false),
-                        new HoneyBatch(1, 5.5, HoneyType.Linden, false),
-                        new HoneyBatch(1, 4.5, HoneyType.WildFlower, false),
-                        new HoneyBatch(1, 4.5, HoneyType.FalseIndigo, false)
+                        new HoneyBatch(1, 5.5, HoneyType.SUNFLOWER, false),
+                        new HoneyBatch(1, 5.5, HoneyType.ACACIA, false),
+                        new HoneyBatch(1, 4.5, HoneyType.RAPESEED, false),
+                        new HoneyBatch(1, 5.5, HoneyType.LINDEN, false),
+                        new HoneyBatch(1, 4.5, HoneyType.WILD_FLOWER, false),
+                        new HoneyBatch(1, 4.5, HoneyType.FALSE_INDIGO, false)
 
                 ))),
                 new Hive(3, new ArrayList<>(Arrays.asList(
-                        new HoneyBatch(1, 5.5, HoneyType.SunFlower, false),
-                        new HoneyBatch(1, 5.5, HoneyType.Acacia, false),
-                        new HoneyBatch(1, 4.5, HoneyType.Rapeseed, false),
-                        new HoneyBatch(1, 5.5, HoneyType.Linden, false),
-                        new HoneyBatch(1, 4.5, HoneyType.WildFlower, false),
-                        new HoneyBatch(1, 4.5, HoneyType.FalseIndigo, false)
+                        new HoneyBatch(1, 5.5, HoneyType.SUNFLOWER, false),
+                        new HoneyBatch(1, 5.5, HoneyType.ACACIA, false),
+                        new HoneyBatch(1, 4.5, HoneyType.RAPESEED, false),
+                        new HoneyBatch(1, 5.5, HoneyType.LINDEN, false),
+                        new HoneyBatch(1, 4.5, HoneyType.WILD_FLOWER, false),
+                        new HoneyBatch(1, 4.5, HoneyType.FALSE_INDIGO, false)
 
                 )))
         );
@@ -46,12 +46,12 @@ class ApiaryTest {
         apiary.honeyHarvestedByHoneyType();
         HarvestHoney totalHarvestedHoney = apiary.getTotalHarvestedHoney();
 
-        assertEquals(16.5, totalHarvestedHoney.getHoneyAmount(HoneyType.SunFlower), 0.01);
-        assertEquals(16.5, totalHarvestedHoney.getHoneyAmount(HoneyType.Acacia), 0.01);
-        assertEquals(13.5, totalHarvestedHoney.getHoneyAmount(HoneyType.Rapeseed), 0.01);
-        assertEquals(16.5, totalHarvestedHoney.getHoneyAmount(HoneyType.Linden), 0.01);
-        assertEquals(13.5, totalHarvestedHoney.getHoneyAmount(HoneyType.WildFlower), 0.01);
-        assertEquals(13.5, totalHarvestedHoney.getHoneyAmount(HoneyType.FalseIndigo), 0.01);
+        assertEquals(16.5, totalHarvestedHoney.getHoneyAmount(HoneyType.SUNFLOWER), 0.01);
+        assertEquals(16.5, totalHarvestedHoney.getHoneyAmount(HoneyType.ACACIA), 0.01);
+        assertEquals(13.5, totalHarvestedHoney.getHoneyAmount(HoneyType.RAPESEED), 0.01);
+        assertEquals(16.5, totalHarvestedHoney.getHoneyAmount(HoneyType.LINDEN), 0.01);
+        assertEquals(13.5, totalHarvestedHoney.getHoneyAmount(HoneyType.WILD_FLOWER), 0.01);
+        assertEquals(13.5, totalHarvestedHoney.getHoneyAmount(HoneyType.FALSE_INDIGO), 0.01);
     }
 
     @Test
@@ -63,12 +63,12 @@ class ApiaryTest {
         HarvestHoney soldHoney = new HarvestHoney(3.0, 1.0, 0.0, 2.0, 0.0, 0.0);
         apiary.updateHoneyStock(soldHoney);
 
-        assertEquals(7.0, apiary.getTotalHarvestedHoney().getHoneyAmount(HoneyType.Acacia));
-        assertEquals(4.0, apiary.getTotalHarvestedHoney().getHoneyAmount(HoneyType.Rapeseed));
-        assertEquals(8.0, apiary.getTotalHarvestedHoney().getHoneyAmount(HoneyType.WildFlower));
-        assertEquals(10.0, apiary.getTotalHarvestedHoney().getHoneyAmount(HoneyType.Linden));
-        assertEquals(6.0, apiary.getTotalHarvestedHoney().getHoneyAmount(HoneyType.SunFlower));
-        assertEquals(4.0, apiary.getTotalHarvestedHoney().getHoneyAmount(HoneyType.FalseIndigo));
+        assertEquals(7.0, apiary.getTotalHarvestedHoney().getHoneyAmount(HoneyType.ACACIA));
+        assertEquals(4.0, apiary.getTotalHarvestedHoney().getHoneyAmount(HoneyType.RAPESEED));
+        assertEquals(8.0, apiary.getTotalHarvestedHoney().getHoneyAmount(HoneyType.WILD_FLOWER));
+        assertEquals(10.0, apiary.getTotalHarvestedHoney().getHoneyAmount(HoneyType.LINDEN));
+        assertEquals(6.0, apiary.getTotalHarvestedHoney().getHoneyAmount(HoneyType.SUNFLOWER));
+        assertEquals(4.0, apiary.getTotalHarvestedHoney().getHoneyAmount(HoneyType.FALSE_INDIGO));
     }
 }
 

@@ -23,7 +23,7 @@ public class BeesBatches {
     }
 
     public BeesBatches(int beesPerBatch) {
-        beesBatches = new LinkedList<>(Collections.nCopies(daysToLiveForABee, beesPerBatch));
+        beesBatches = new LinkedList<>(Collections.nCopies(DAYS_TO_LIVE_FOR_A_BEE, beesPerBatch));
     }
 
     public LinkedList<Integer> getBeesBatches() {
@@ -45,8 +45,8 @@ public class BeesBatches {
     public void hibernateBeesBatches() {
         logger.debug("Starting hibernateBeesBatches method.");
         if (beesBatches != null && beesBatches.size() >= 2) {
-            for (int i = 0; i < daysToLiveForABee; i++) {
-                int beesDiedDueHibernate = (int) (beesBatches.get(i) * percentOfBeesDiedDueToHibernate);
+            for (int i = 0; i < DAYS_TO_LIVE_FOR_A_BEE; i++) {
+                int beesDiedDueHibernate = (int) (beesBatches.get(i) * PERCENT_OF_BEES_DIED_DUE_TO_HIBERNATE);
                 int newBeeCount = beesBatches.get(i) - beesDiedDueHibernate;
                 beesBatches.set(i, Math.max(newBeeCount, 0));
             }
@@ -90,7 +90,7 @@ public class BeesBatches {
                 .mapToInt(Integer::intValue)
                 .sum();
         beesBatches.removeFirst();
-        return totalBeesBatches * numberOfFlight * pollenQuantityCarriedByABee * productivity;
+        return totalBeesBatches * numberOfFlight * POLLEN_QUANTITY_CARRIED_BY_A_BEE * productivity;
     }
 }
 

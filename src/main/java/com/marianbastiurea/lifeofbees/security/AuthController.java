@@ -53,7 +53,7 @@ public class AuthController {
         } catch (IllegalArgumentException e) {
             System.err.println("Validation error: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(Map.of("error", e.getMessage())); // Trimite mesaj JSON clar
+                    .body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -69,7 +69,7 @@ public class AuthController {
     }
 
 
-    @PostMapping("/signin")
+    @PostMapping("/signIn")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         try {
             User user = userService.findUserByUsername(loginRequest.getUsername());

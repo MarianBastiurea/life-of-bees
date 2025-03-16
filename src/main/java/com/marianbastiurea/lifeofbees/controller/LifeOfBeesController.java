@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.marianbastiurea.lifeofbees.bees.ApiaryParameters.priceOfAHive;
+import static com.marianbastiurea.lifeofbees.bees.ApiaryParameters.PRICE_OF_A_HIVE;
 
 
 @RestController
@@ -222,7 +222,7 @@ public class LifeOfBeesController {
         String userId = principal.getName();
         accessDenied(lifeOfBeesGame, userId);
         Integer numberOfHives = request.get("numberOfHives");
-        int totalCost = numberOfHives * priceOfAHive;
+        int totalCost = numberOfHives * PRICE_OF_A_HIVE;
         if (totalCost < lifeOfBeesGame.getMoneyInTheBank()) {
             Apiary apiary = lifeOfBeesGame.getApiary();
             apiary.getHives().addNewHivesToHives(apiary.getHives().createHives(numberOfHives, apiary.getHives().getCurrentDate()), lifeOfBeesGame);

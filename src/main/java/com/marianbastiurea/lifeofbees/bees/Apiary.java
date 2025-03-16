@@ -55,7 +55,7 @@ public class Apiary {
 
         List<HoneyBatch> unprocessedBatches = hiveList.stream()
                 .flatMap(hive -> hive.getHoneyBatches().stream())
-                .filter(honeyBatch -> !honeyBatch.isProcessed()) // Doar cele neprocesate
+                .filter(honeyBatch -> !honeyBatch.isProcessed())
                 .collect(Collectors.toList());
 
         unprocessedBatches.forEach(honeyBatch -> {
@@ -63,9 +63,9 @@ public class Apiary {
             honeyBatch.setProcessed(true);
         });
         logger.info("Honey batches after processing:");
-        hiveList.forEach(hive -> {
-            logger.info("Hive {}: {}", hive.getId(), hive.getHoneyBatches());
-        });
+        hiveList.forEach(hive ->
+                logger.info("Hive {}: {}", hive.getId(), hive.getHoneyBatches())
+        );
 
         Map<HoneyType, Double> honeyHarvested = unprocessedBatches.stream()
                 .collect(Collectors.groupingBy(
@@ -73,9 +73,9 @@ public class Apiary {
                         Collectors.summingDouble(HoneyBatch::getKgOfHoney)
                 ));
 
-        honeyHarvested.forEach((honeyType, amount) -> {
-            logger.info("Harvested {} kg of {} honey", amount, honeyType);
-        });
+        honeyHarvested.forEach((honeyType, amount) ->
+                logger.info("Harvested {} kg of {} honey", amount, honeyType)
+        );
 
         honeyHarvested.forEach((honeyType, amount) -> {
             double currentAmount = totalHarvestedHoney.getHoneyAmount(honeyType);

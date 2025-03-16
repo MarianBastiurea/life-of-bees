@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class UserService {
 
@@ -60,12 +58,6 @@ public class UserService {
             System.out.println("User find in createGame: " + user);
         }
         return user;
-    }
-
-    public String findUserIdByUsername(String username) {
-        Optional<User> user = userRepository.findByUsername(username);
-        return user.map(User::getUserId)
-                .orElseThrow(() -> new RuntimeException("User not found: " + username));
     }
 }
 

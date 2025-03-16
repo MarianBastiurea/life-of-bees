@@ -34,7 +34,7 @@ public class EggFrames {
 
     public EggFrames(int numberOfEggFrames) {
         this.numberOfEggFrames = numberOfEggFrames;
-        this.eggsByDay = new LinkedList<>(Collections.nCopies(daysToHatch, 1000));
+        this.eggsByDay = new LinkedList<>(Collections.nCopies(DAYS_TO_HATCH, 1000));
     }
 
     /*
@@ -42,19 +42,19 @@ public class EggFrames {
      */
     public EggFrames(int numberOfEggFrames, int dailyEggs, boolean wasMovedAnEggsFrame) {
         this.numberOfEggFrames = numberOfEggFrames;
-        this.eggsByDay = new LinkedList<>(Collections.nCopies(daysToHatch, dailyEggs));
+        this.eggsByDay = new LinkedList<>(Collections.nCopies(DAYS_TO_HATCH, dailyEggs));
         this.wasMovedAnEggsFrame = wasMovedAnEggsFrame;
     }
 
     public EggFrames(int numberOfEggFrames, double eggFramesFillPercentage) {
         this.numberOfEggFrames = numberOfEggFrames;
-        double o = numberOfEggFrames * maxEggPerFrame * eggFramesFillPercentage / daysToHatch;
-        this.eggsByDay = new LinkedList<>(Collections.nCopies(daysToHatch, (int) o));
+        double o = numberOfEggFrames * MAX_EGG_PER_FRAME * eggFramesFillPercentage / DAYS_TO_HATCH;
+        this.eggsByDay = new LinkedList<>(Collections.nCopies(DAYS_TO_HATCH, (int) o));
     }
 
     public static EggFrames getRandomEggFrames() {
         EggFrames eggFrames = new EggFrames(randomParameters.numberOfEggFrames());
-        randomParameters.getRandomEggCounts(daysToHatch)
+        randomParameters.getRandomEggCounts(DAYS_TO_HATCH)
                 .forEach(eggFrames::hatchBees);
 
         logger.debug("Finishing method getRandomEggFrames");
@@ -80,7 +80,7 @@ public class EggFrames {
             newEggBatches.add(halfEggs);
             eggsByDay.set(i, halfEggs);
         }
-        numberOfEggFrames = 3;
+        numberOfEggFrames = NUMBER_OF_EGGS_FRAMES_WHEN_SPLIT;
 
         return new EggFrames(3, newEggBatches, false);
     }
@@ -92,17 +92,17 @@ public class EggFrames {
 
 
     public int hatchBees(int eggsToAdd) {
-        eggsByDay.addFirst(Math.min(eggsToAdd, maxEggPerFrame * numberOfEggFrames - getEggs()));
+        eggsByDay.addFirst(Math.min(eggsToAdd, MAX_EGG_PER_FRAME * numberOfEggFrames - getEggs()));
         return eggsByDay.removeLast();
     }
 
     public void incrementNumberOfEggFrames() {
-        if (this.numberOfEggFrames < maxNumberOfEggFrames)
+        if (this.numberOfEggFrames < MAX_NUMBER_OF_EGG_FRAMES)
             this.numberOfEggFrames++;
     }
 
     public boolean isMaxNumberOfEggFrames() {
-        return numberOfEggFrames == maxNumberOfEggFrames;
+        return numberOfEggFrames == MAX_NUMBER_OF_EGG_FRAMES;
     }
 
 
@@ -116,12 +116,12 @@ public class EggFrames {
 
     public boolean isFull() {
         int eggs = getEggs();
-        return eggs >= numberOfEggFrames * maxEggPerFrame * fullnessFactor;
+        return eggs >= numberOfEggFrames * MAX_EGG_PER_FRAME * FULLNESS_FACTOR;
     }
 
 
     public void moveAnEggFrame(EggFrames destinationEggFrame) {
-        for (int i = 0; i < daysToHatch; i++) {
+        for (int i = 0; i < DAYS_TO_HATCH; i++) {
             int sourceEggs = eggsByDay.get(i);
             int destinationEggs = destinationEggFrame.eggsByDay.get(i);
             int eggsToMove = sourceEggs / numberOfEggFrames;
@@ -136,7 +136,7 @@ public class EggFrames {
 
 
     public void hibernateEggFrames() {
-        for (int i = 0; i < daysToHatch; i++) {
+        for (int i = 0; i < DAYS_TO_HATCH; i++) {
             Integer sourceEggs = eggsByDay.get(i);
             int eggsToMove = sourceEggs / numberOfEggFrames;
             eggsByDay.set(i, sourceEggs - eggsToMove);
@@ -154,7 +154,7 @@ public class EggFrames {
 
     @Override
     public int hashCode() {
-        return Objects.hash(numberOfEggFrames, eggsByDay, wasMovedAnEggsFrame, maxNumberOfEggFrames);
+        return Objects.hash(numberOfEggFrames, eggsByDay, wasMovedAnEggsFrame, MAX_NUMBER_OF_EGG_FRAMES);
     }
 
     @Override
@@ -163,7 +163,7 @@ public class EggFrames {
                 "numberOfEggFrames=" + numberOfEggFrames +
                 ", eggsByDay=" + eggsByDay +
                 ", wasMovedAnEggsFrame=" + wasMovedAnEggsFrame +
-                ", maxNumberOfEggFrames=" + maxNumberOfEggFrames +
+                ", maxNumberOfEggFrames=" + MAX_NUMBER_OF_EGG_FRAMES +
                 '}';
     }
 }

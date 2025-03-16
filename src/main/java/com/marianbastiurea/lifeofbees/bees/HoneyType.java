@@ -1,12 +1,12 @@
 package com.marianbastiurea.lifeofbees.bees;
 
 public enum HoneyType {
-    Acacia(1),
-    Rapeseed(0.8),
-    WildFlower(0.75),
-    Linden(1),
-    SunFlower(0.8),
-    FalseIndigo(0.7);
+    ACACIA(1),
+    RAPESEED(0.8),
+    WILD_FLOWER(0.75),
+    LINDEN(1),
+    SUNFLOWER(0.8),
+    FALSE_INDIGO(0.7);
 
     private final double productivity;
 

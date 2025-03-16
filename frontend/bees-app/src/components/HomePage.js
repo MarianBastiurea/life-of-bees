@@ -88,8 +88,6 @@ const HomePage = () => {
         }
     };
 
-
-
     const handleLogout = async () => {
         localStorage.removeItem('authToken');
         localStorage.removeItem('userId');
@@ -111,14 +109,11 @@ const HomePage = () => {
         }
     };
 
-
     const handleCloseModal = () => {
         setShowPublicModal(false);
         setShowPrivateModal(false);
         setShowAuthModal(false);
     };
-
-
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -192,8 +187,6 @@ const HomePage = () => {
             console.error(`Error deleting game ${gameId}:`, error.message);
         }
     };
-
-
 
     useEffect(() => {
         console.log("showAuthModal changed:", showAuthModal);

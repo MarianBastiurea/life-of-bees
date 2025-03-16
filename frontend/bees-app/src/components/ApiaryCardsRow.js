@@ -37,7 +37,6 @@ const GameRow = ({ games, onDelete, onClick }) => (
 
 const ApiaryCardsRow = ({ isAuthenticated, userId, gameType, onGameClick, handleDelete }) => {
     const [games, setGames] = useState([]);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchGames = async () => {

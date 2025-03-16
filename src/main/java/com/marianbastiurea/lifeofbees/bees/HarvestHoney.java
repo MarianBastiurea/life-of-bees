@@ -15,12 +15,12 @@ public class HarvestHoney {
 
     public HarvestHoney(double acacia, double rapeseed, double wildFlower, double linden, double sunFlower, double falseIndigo) {
         this();
-        honeyTypeToAmount.put(HoneyType.Acacia, acacia);
-        honeyTypeToAmount.put(HoneyType.Rapeseed, rapeseed);
-        honeyTypeToAmount.put(HoneyType.WildFlower, wildFlower);
-        honeyTypeToAmount.put(HoneyType.Linden, linden);
-        honeyTypeToAmount.put(HoneyType.SunFlower, sunFlower);
-        honeyTypeToAmount.put(HoneyType.FalseIndigo, falseIndigo);
+        honeyTypeToAmount.put(HoneyType.ACACIA, acacia);
+        honeyTypeToAmount.put(HoneyType.RAPESEED, rapeseed);
+        honeyTypeToAmount.put(HoneyType.WILD_FLOWER, wildFlower);
+        honeyTypeToAmount.put(HoneyType.LINDEN, linden);
+        honeyTypeToAmount.put(HoneyType.SUNFLOWER, sunFlower);
+        honeyTypeToAmount.put(HoneyType.FALSE_INDIGO, falseIndigo);
     }
 
     public double getHoneyAmount(HoneyType type) {

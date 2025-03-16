@@ -2,7 +2,7 @@ package com.marianbastiurea.lifeofbees.bees;
 
 import java.util.Objects;
 
-import static com.marianbastiurea.lifeofbees.bees.ApiaryParameters.maxEggsDailyLaidByQueen;
+import static com.marianbastiurea.lifeofbees.bees.ApiaryParameters.MAX_EGGS_DAILY_LAID_BY_QUEEN;
 
 public class Queen {
     public double feedBeesIndex;
@@ -38,7 +38,7 @@ public class Queen {
     }
 
     public int makeEggs(double productivity, double weatherIndex) {
-        return (int) (maxEggsDailyLaidByQueen * this.ageOfQueenIndex() * productivity * weatherIndex * feedBeesIndex);
+        return (int) (MAX_EGGS_DAILY_LAID_BY_QUEEN * this.ageOfQueenIndex() * productivity * weatherIndex * feedBeesIndex);
     }
 
     public double ageOfQueenIndex() {

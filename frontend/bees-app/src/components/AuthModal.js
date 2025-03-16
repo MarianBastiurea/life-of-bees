@@ -1,15 +1,14 @@
 import React from 'react';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
 import { handleGoogleLogin } from './BeesApiService';
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+
 
 
 const AuthModal = ({ handleClose, handleSubmit, handleInputChange, formData, isSignUp, setIsSignUp, errorMessage, setIsAuthenticated, setUsername, setAuthMessage, setFormData }) => {
     const [passwordError, setPasswordError] = React.useState(null);
-    const location = useLocation();
     const [username] = useState(null);
-    const [showAuthModal, setShowAuthModal] = useState(false);
+    const [setShowAuthModal] = useState(false);
 
 
     useEffect(() => {
@@ -57,7 +56,6 @@ const AuthModal = ({ handleClose, handleSubmit, handleInputChange, formData, isS
     const toggleSignUp = () => {
         setIsSignUp((prev) => !prev);
     };
-
 
     const handleCloseModal = () => {
         setIsSignUp(false);

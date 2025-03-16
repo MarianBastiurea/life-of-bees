@@ -67,7 +67,7 @@ export const handleGoogleLogin = async (googleToken) => {
 
 export const authenticateUser = async (authData) => {
     try {
-        const response = await apiClient.post('/auth/signin', authData);
+        const response = await apiClient.post('/auth/signIn', authData);
         const { token, userId } = response.data;
         return { token, userId };
     } catch (error) {
@@ -121,8 +121,6 @@ export const getHoneyQuantities = async (gameId) => {
 };
 
 
-
-
 export const sendSellHoneyQuantities = {
     updateHoneyStock: async (gameId, honeyTypeToAmount, totalValue) => {
         try {
@@ -139,8 +137,6 @@ export const sendSellHoneyQuantities = {
         }
     },
 };
-
-
 
 export const buyHives = async (gameId, numberOfHives) => {
     try {
