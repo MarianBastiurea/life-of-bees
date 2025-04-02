@@ -13,8 +13,8 @@ public class EggFrames {
 
     private static final Logger logger = LoggerFactory.getLogger(EggFrames.class);
     public static RandomParameters randomParameters = new RandomParameters();
-    public LinkedList<Integer> eggsByDay;
-    public boolean wasMovedAnEggsFrame;
+    private LinkedList<Integer> eggsByDay;
+    private boolean wasMovedAnEggsFrame;
     private int numberOfEggFrames;
 
     public EggFrames(int numberOfEggFrames, LinkedList<Integer> eggsByDay) {
@@ -61,17 +61,19 @@ public class EggFrames {
         return eggFrames;
     }
 
-    public void setWasMovedAnEggsFrame(boolean wasMovedAnEggsFrame) {
-        this.wasMovedAnEggsFrame = wasMovedAnEggsFrame;
+    public boolean isWasMovedAnEggsFrame() {
+        return wasMovedAnEggsFrame;
     }
+
+    public void resetEggFrameMovement() {
+        this.wasMovedAnEggsFrame = false;
+    }
+
 
     public int getNumberOfEggFrames() {
         return numberOfEggFrames;
     }
 
-    public void setNumberOfEggFrames(int numberOfEggFrames) {
-        this.numberOfEggFrames = numberOfEggFrames;
-    }
 
     public EggFrames splitEggFrames() {
         LinkedList<Integer> newEggBatches = new LinkedList<>();
@@ -129,7 +131,7 @@ public class EggFrames {
             destinationEggFrame.eggsByDay.set(i, destinationEggs + eggsToMove);
 
         }
-        setWasMovedAnEggsFrame(true);
+        this.wasMovedAnEggsFrame = true;
         numberOfEggFrames--;
         destinationEggFrame.numberOfEggFrames++;
     }

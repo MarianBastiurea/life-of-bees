@@ -110,7 +110,7 @@ public class Hives {
                 .filter(sourceHive -> {
                     boolean isEggFrameFull = sourceHive.getEggFrames().checkIfAll6EggsFrameAre80PercentFull();
                     boolean isNotSplit = !sourceHive.itWasSplit;
-                    boolean wasNotMoved = !sourceHive.getEggFrames().wasMovedAnEggsFrame;
+                    boolean wasNotMoved = !sourceHive.getEggFrames().isWasMovedAnEggsFrame();
                     return isEggFrameFull && isNotSplit && wasNotMoved;
                 })
                 .flatMap(sourceHive -> hives.stream()
@@ -174,7 +174,7 @@ public class Hives {
             this.getHives().forEach(hive -> {
                 hive.getQueen().setAgeOfQueen(hive.getQueen().getAgeOfQueen() + 1);
                 hive.setItWasSplit(false);
-                hive.getEggFrames().setWasMovedAnEggsFrame(false);
+                hive.getEggFrames().resetEggFrameMovement();
                 hive.getEggFrames().hibernateEggFrames();
                 hive.getHoneyFrames().hibernateHoneyFrames();
                 hive.getBeesBatches().hibernateBeesBatches();
