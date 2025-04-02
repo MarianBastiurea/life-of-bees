@@ -29,8 +29,9 @@ public class EggFrames {
         this.wasMovedAnEggsFrame = wasMovedAnEggsFrame;
     }
 
-    public EggFrames() {
+    EggFrames() {
     }
+
 
     public EggFrames(int numberOfEggFrames) {
         this.numberOfEggFrames = numberOfEggFrames;
