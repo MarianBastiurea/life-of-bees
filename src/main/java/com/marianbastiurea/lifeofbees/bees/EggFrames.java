@@ -29,7 +29,7 @@ public class EggFrames {
         this.wasMovedAnEggsFrame = wasMovedAnEggsFrame;
     }
 
-    EggFrames() {
+    public EggFrames() {
     }
 
 
