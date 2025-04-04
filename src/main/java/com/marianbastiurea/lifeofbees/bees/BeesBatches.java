@@ -12,27 +12,20 @@ import static com.marianbastiurea.lifeofbees.bees.ApiaryParameters.*;
 public class BeesBatches {
 
     private static final Logger logger = LoggerFactory.getLogger(BeesBatches.class);
-    LinkedList<Integer> beesBatches;
+    private LinkedList<Integer> beesBatches;
 
     public BeesBatches() {
         this.beesBatches = new LinkedList<>();
     }
 
     public BeesBatches(LinkedList<Integer> beesBatches) {
-        this.beesBatches = beesBatches;
+        this.beesBatches = new LinkedList<>(beesBatches);
     }
 
     public BeesBatches(int beesPerBatch) {
         beesBatches = new LinkedList<>(Collections.nCopies(DAYS_TO_LIVE_FOR_A_BEE, beesPerBatch));
     }
 
-    public LinkedList<Integer> getBeesBatches() {
-        return beesBatches;
-    }
-
-    public void setBeesBatches(LinkedList<Integer> beesBatches) {
-        this.beesBatches = beesBatches;
-    }
 
 
     @Override
