@@ -107,6 +107,4 @@ public class Apiary {
 
         logger.debug("Finished updateHoneyStock. Updated totalHarvestedHoney = {}", totalHarvestedHoney);
     }
-
-
 }

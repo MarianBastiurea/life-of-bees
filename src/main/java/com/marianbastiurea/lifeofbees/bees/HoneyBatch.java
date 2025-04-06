@@ -16,10 +16,6 @@ public class HoneyBatch {
         this.isProcessed = isProcessed;
     }
 
-    public int getHiveId() {
-        return hiveId;
-    }
-
     public double getKgOfHoney() {
         return kgOfHoney;
     }
