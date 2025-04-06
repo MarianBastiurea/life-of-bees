@@ -7,12 +7,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class Hive {
-    public static RandomParameters randomParameters = new RandomParameters();
-    public boolean itWasSplit;
-    public List<HoneyBatch> honeyBatches;
-    public boolean itWasHarvested;
-    public BeesBatches beesBatches;
-    public HoneyFrames honeyFrames;
+    private static RandomParameters randomParameters = new RandomParameters();
+    private boolean itWasSplit;
+    private List<HoneyBatch> honeyBatches;
+    private BeesBatches beesBatches;
+    private HoneyFrames honeyFrames;
     private int id;
     private EggFrames eggFrames;
     private Queen queen;
@@ -63,7 +62,7 @@ public class Hive {
                 new Queen());
     }
 
-    public Hive(int id, HoneyFrames honeyFrames, List<HoneyBatch> honeyBatches, boolean itWasHarvested) {
+    public Hive(int id, HoneyFrames honeyFrames, List<HoneyBatch> honeyBatches) {
         this(
                 id,
                 false,

@@ -14,7 +14,7 @@ import static com.marianbastiurea.lifeofbees.bees.ApiaryParameters.MAX_NUMBER_OF
 
 public class Hives {
     private static final Logger logger = LoggerFactory.getLogger(Hives.class);
-    public static RandomParameters randomParameters = new RandomParameters();
+    private RandomParameters randomParameters = new RandomParameters();
     private List<Hive> hives;
     private BeeTime currentDate;
 
@@ -109,12 +109,12 @@ public class Hives {
         List<MoveEggFramePairHives> result = hives.stream()
                 .filter(sourceHive -> {
                     boolean isEggFrameFull = sourceHive.getEggFrames().checkIfAll6EggsFrameAre80PercentFull();
-                    boolean isNotSplit = !sourceHive.itWasSplit;
+                    boolean isNotSplit = !sourceHive.isItWasSplit();
                     boolean wasNotMoved = !sourceHive.getEggFrames().isWasMovedAnEggsFrame();
                     return isEggFrameFull && isNotSplit && wasNotMoved;
                 })
                 .flatMap(sourceHive -> hives.stream()
-                        .filter(targetHive -> targetHive.itWasSplit
+                        .filter(targetHive -> targetHive.isItWasSplit()
                                 && targetHive.getEggFrames().getNumberOfEggFrames() < MAX_NUMBER_OF_EGG_FRAMES)
                         .map(targetHive ->
                                 new MoveEggFramePairHives(sourceHive.getId(), targetHive.getId())

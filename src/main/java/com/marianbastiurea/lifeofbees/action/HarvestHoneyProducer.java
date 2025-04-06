@@ -17,7 +17,7 @@ public class HarvestHoneyProducer implements ActionOfTheWeekProducer<List<Intege
         BeeTime currentDate = hives.getCurrentDate();
         if (currentDate.timeToHarvestHive()) {
             for (Hive hive : hives.getHives()) {
-                boolean hasHarvestableFrame = hive.getHoneyFrames().honeyFrame.stream()
+                boolean hasHarvestableFrame = hive.getHoneyFrames().getHoneyFrame().stream()
                         .anyMatch(HoneyFrame::isHarvestable);
 
                 if (hasHarvestableFrame) {

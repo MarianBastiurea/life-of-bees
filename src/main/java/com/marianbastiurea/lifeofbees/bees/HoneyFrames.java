@@ -8,8 +8,8 @@ import static com.marianbastiurea.lifeofbees.bees.ApiaryParameters.MAX_NUMBER_OF
 
 public class HoneyFrames {
 
-    public static RandomParameters randomParameters = new RandomParameters();
-    public List<HoneyFrame> honeyFrame;
+    private static RandomParameters randomParameters = new RandomParameters();
+    private List<HoneyFrame> honeyFrame;
 
     public HoneyFrames() {
     }
@@ -38,12 +38,7 @@ public class HoneyFrames {
         return honeyFrame;
     }
 
-    public void setHoneyFrame(List<HoneyFrame> honeyFrame) {
-        this.honeyFrame = honeyFrame;
-    }
-
     public boolean canAddANewHoneyFrameInHive() {
-
         long honeyFrameFull = getHoneyFrame().stream()
                 .filter(HoneyFrame::isHarvestable)
                 .count();
@@ -87,14 +82,12 @@ public class HoneyFrames {
         }
     }
 
-
     public void fillUpAHoneyFrame(double kgOfHoneyToAdd) {
         int numberOfHoneyFrameNotFull = getHoneyFrame().size() - getNumberOfFullHoneyFrame();
         for (HoneyFrame honeyFrame : getHoneyFrame()) {
             honeyFrame.fill(kgOfHoneyToAdd / numberOfHoneyFrameNotFull);
         }
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -115,8 +108,6 @@ public class HoneyFrames {
                 "honeyFrame=" + honeyFrame +
                 '}';
     }
-
-
 }
 
 

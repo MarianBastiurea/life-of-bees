@@ -26,6 +26,11 @@ public class BeesBatches {
         beesBatches = new LinkedList<>(Collections.nCopies(DAYS_TO_LIVE_FOR_A_BEE, beesPerBatch));
     }
 
+    public LinkedList<Integer> getBeesBatches() {
+        return beesBatches;
+    }
+
+
     @Override
     public String toString() {
         return "BeesBatches{" +

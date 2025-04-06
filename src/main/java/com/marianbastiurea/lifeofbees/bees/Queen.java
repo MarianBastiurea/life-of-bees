@@ -5,7 +5,7 @@ import java.util.Objects;
 import static com.marianbastiurea.lifeofbees.bees.ApiaryParameters.MAX_EGGS_DAILY_LAID_BY_QUEEN;
 
 public class Queen {
-    public double feedBeesIndex;
+    private double feedBeesIndex;
     private int ageOfQueen;
 
     public Queen(int ageOfQueen) {
