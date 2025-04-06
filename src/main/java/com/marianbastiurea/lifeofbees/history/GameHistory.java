@@ -8,8 +8,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class GameHistory {
 
     @Id
-    private String gameId;
     private String gameHistoryId;
+    private String gameId;
     private LifeOfBees gameHistory;
 
     public GameHistory() {
