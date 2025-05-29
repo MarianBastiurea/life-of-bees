@@ -5,6 +5,7 @@ import ApiaryCardsRow from './ApiaryCardsRow';
 import AuthModal from './AuthModal';
 import { authenticateUser, registerUser, deleteGame } from './BeesApiService';
 import { useNavigate } from 'react-router-dom';
+import helpText from './help';
 
 
 const HomePage = () => {
@@ -18,6 +19,7 @@ const HomePage = () => {
     const [gameType, setGameType] = useState(null);
     const [activeTab, setActiveTab] = useState("Public Game");
     const [games, setGames] = useState([]);
+    const [showHelp, setShowHelp] = useState(false);
 
     const [formData, setFormData] = useState({
         username: '',
@@ -211,6 +213,33 @@ const HomePage = () => {
                 >
                     Create private game
                 </button>
+
+                <button
+                    className="btn btn-primary btn-lg"
+                    onClick={() => setShowHelp(true)}>
+                    Help
+                </button>
+
+                {showHelp && (
+                    <div className="modal show d-block" tabIndex="-1">
+                        <div className="modal-dialog modal-lg">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title">Help</h5>
+                                    <button type="button" className="btn-close" onClick={() => setShowHelp(false)}></button>
+                                </div>
+                                <div className="modal-body" style={{ whiteSpace: 'pre-wrap', textAlign: 'justify' }}>
+                                    {helpText}
+                                </div>
+                                <div className="modal-footer">
+                                    <button className="btn btn-secondary" onClick={() => setShowHelp(false)}>
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 <div className="d-flex gap-3 ms-auto align-items-center">
                     {username && <span className="hello-user">Hello, {username}!</span>}
