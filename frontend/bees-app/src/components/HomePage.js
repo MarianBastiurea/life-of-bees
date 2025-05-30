@@ -229,7 +229,7 @@ const HomePage = () => {
                                     <button type="button" className="btn-close" onClick={() => setShowHelp(false)}></button>
                                 </div>
                                 <div className="modal-body" style={{ whiteSpace: 'pre-wrap', textAlign: 'justify' }}>
-                                    {helpText}
+                                    <div dangerouslySetInnerHTML={{ __html: helpText }} />
                                 </div>
                                 <div className="modal-footer">
                                     <button className="btn btn-secondary" onClick={() => setShowHelp(false)}>
