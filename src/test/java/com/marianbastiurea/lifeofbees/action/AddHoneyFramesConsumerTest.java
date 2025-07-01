@@ -14,7 +14,7 @@ class AddHoneyFramesConsumerTest {
 
     @Test
     void addsFramesToSpecifiedHives() {
-        AddHoneyFramesConsumer consumer = new AddHoneyFramesConsumer();
+        AddHoneyFramesConsumerAbstract consumer = new AddHoneyFramesConsumerAbstract();
         Hives hives = new Hives(
                 new Hive(1, new HoneyFrames(3, 0)),
                 new Hive(2, new HoneyFrames(4, 0)),
@@ -32,7 +32,7 @@ class AddHoneyFramesConsumerTest {
 
     @Test
     void doesNothingWhenHoneyHiveIdsIsEmpty() {
-        AddHoneyFramesConsumer consumer = new AddHoneyFramesConsumer();
+        AddHoneyFramesConsumerAbstract consumer = new AddHoneyFramesConsumerAbstract();
         Hives hives = new Hives(
                 new Hive(1, new HoneyFrames(3, 0)),
                 new Hive(2, new HoneyFrames(4, 0)),

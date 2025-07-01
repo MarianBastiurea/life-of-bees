@@ -1,13 +1,13 @@
 package com.marianbastiurea.lifeofbees.action;
 
 public enum ActionType {
-    ADD_EGGS_FRAME(new AddEggsFramesProducer(), new AddEggsFramesConsumer()),
-    ADD_HONEY_FRAME(new AddHoneyFramesProducer(), new AddHoneyFramesConsumer()),
-    MOVE_EGGS_FRAME(new MoveAnEggsFrameProducer(), new MoveAnEggsFrameConsumer()),
-    FEED_BEES(new FeedBeesProducer(), new FeedBeesConsumer()),
-    SPLIT_HIVE(new SplitHiveProducer(), new SplitHiveConsumer()),
-    INSECT_CONTROL(new InsectControlProducer(), new InsectControlConsumer()),
-    HARVEST_HONEY(new HarvestHoneyProducer(), new HarvestHoneyConsumer());
+    ADD_EGGS_FRAME(new AddEggsFramesProducer(), new AddEggsFramesConsumerAbstract()),
+    ADD_HONEY_FRAME(new AddHoneyFramesProducer(), new AddHoneyFramesConsumerAbstract()),
+    MOVE_EGGS_FRAME(new MoveAnEggsFrameProducer(), new MoveAnEggsFrameConsumerAbstract()),
+    FEED_BEES(new FeedBeesProducerAbstract(), new FeedBeesConsumer()),
+    SPLIT_HIVE(new SplitHiveProducer(), new SplitHiveConsumerAbstract()),
+    INSECT_CONTROL(new InsectControlProducerAbstract(), new InsectControlConsumer()),
+    HARVEST_HONEY(new HarvestHoneyProducer(), new HarvestHoneyConsumerAbstract());
 
     private final ActionOfTheWeekProducer producer;
     private final ActionOfTheWeekConsumer biConsumer;

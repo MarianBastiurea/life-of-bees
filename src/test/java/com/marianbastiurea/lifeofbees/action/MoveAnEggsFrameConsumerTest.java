@@ -21,7 +21,7 @@ class MoveAnEggsFrameConsumerTest {
         List<Integer> hiveIdPair = List.of(1, 2);
 
 
-        MoveAnEggsFrameConsumer moveAnEggsFrameConsumer = new MoveAnEggsFrameConsumer();
+        MoveAnEggsFrameConsumerAbstract moveAnEggsFrameConsumer = new MoveAnEggsFrameConsumerAbstract();
         moveAnEggsFrameConsumer.accept(hives, List.of(hiveIdPair));
 
         Hives actual = new Hives(new Hive(1, finalSourceEggFrames, false),

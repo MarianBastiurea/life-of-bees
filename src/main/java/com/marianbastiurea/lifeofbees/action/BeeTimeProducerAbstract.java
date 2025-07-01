@@ -5,7 +5,7 @@ import com.marianbastiurea.lifeofbees.time.BeeTime;
 
 import java.util.Optional;
 
-public abstract class BeeTimeProducer<T> implements ActionOfTheWeekProducer<T> {
+public abstract class BeeTimeProducerAbstract<T> implements ActionOfTheWeekProducer<T> {
 
     @Override
     public Optional<T> produce(Hives hives) {

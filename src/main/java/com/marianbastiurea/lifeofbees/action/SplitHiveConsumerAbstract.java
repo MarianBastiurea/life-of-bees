@@ -6,17 +6,17 @@ import com.marianbastiurea.lifeofbees.bees.Hives;
 import java.util.List;
 
 
-public class AddEggsFramesConsumer extends HiveConsumer<List<Integer>> {
-
+public class SplitHiveConsumerAbstract extends HiveConsumerAbstract<List<Integer>> {
     @Override
-    public void accept(Hives hives, List<Integer> eggHiveIds) {
-        if (eggHiveIds != null) {
-            eggHiveIds.forEach(hiveId -> {
+    public void accept(Hives hives, List<Integer> hiveIds) {
+        if (hiveIds != null) {
+            hiveIds.forEach(hiveId -> {
                 Hive hive = hives.getHiveById(hiveId);
                 if (hive != null) {
-                    hive.addNewEggsFrameInHive();
+                    hives.splitHive(hive.getId());
                 }
             });
         }
     }
 }
+

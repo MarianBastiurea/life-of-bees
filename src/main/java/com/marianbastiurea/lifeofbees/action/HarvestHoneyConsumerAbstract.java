@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 
-public class HarvestHoneyConsumer extends HiveConsumer<List<Integer>> {
-    private static final Logger logger = LoggerFactory.getLogger(HarvestHoneyConsumer.class);
+public class HarvestHoneyConsumerAbstract extends HiveConsumerAbstract<List<Integer>> {
+    private static final Logger logger = LoggerFactory.getLogger(HarvestHoneyConsumerAbstract.class);
 
 
     @Override

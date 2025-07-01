@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class InsectControlProducerTest {
     @Test
     void cantDoInsectControlIfMonthIsMarch() {
-        Optional<Boolean> result = new InsectControlProducer().produce(
+        Optional<Boolean> result = new InsectControlProducerAbstract().produce(
                 new BeeTime(2023, 3, 22)
         );
         assertTrue(result.isEmpty(), "Insect control should not be allowed in March.");
@@ -18,7 +18,7 @@ class InsectControlProducerTest {
 
     @Test
     void cantDoInsectControlIfMonthIsAprilAndDayIs1() {
-        Optional<Boolean> result = new InsectControlProducer().produce(
+        Optional<Boolean> result = new InsectControlProducerAbstract().produce(
                 new BeeTime(2023, 4, 1)
         );
         assertTrue(result.isEmpty(), "Insect control should not be allowed in 1st April");
@@ -26,7 +26,7 @@ class InsectControlProducerTest {
 
     @Test
     void canDoInsectControlIfMonthIsAprilAndDayIs10() {
-        Optional<Boolean> result = new InsectControlProducer().produce(
+        Optional<Boolean> result = new InsectControlProducerAbstract().produce(
                 new BeeTime(2023, 4, 10)
         );
         assertTrue(result.isPresent(), "Insect control should be allowed on the last valid day.");

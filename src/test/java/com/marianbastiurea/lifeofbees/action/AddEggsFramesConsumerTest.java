@@ -15,7 +15,7 @@ class AddEggsFramesConsumerTest {
 
     @Test
     void addsFramesToSpecifiedHives() {
-        AddEggsFramesConsumer consumer = new AddEggsFramesConsumer();
+        AddEggsFramesConsumerAbstract consumer = new AddEggsFramesConsumerAbstract();
 
         Hives hives = new Hives(
                 new Hive(1, new EggFrames(4, new LinkedList<>(Arrays.asList(6400, 6400, 6400, 6400)), false)),
@@ -33,7 +33,7 @@ class AddEggsFramesConsumerTest {
 
     @Test
     void doesNothingWhenEggHiveIdsIsEmpty() {
-        AddEggsFramesConsumer consumer = new AddEggsFramesConsumer();
+        AddEggsFramesConsumerAbstract consumer = new AddEggsFramesConsumerAbstract();
 
         Hives hives = new Hives(
                 new Hive(1, new EggFrames(2, 0.8)),

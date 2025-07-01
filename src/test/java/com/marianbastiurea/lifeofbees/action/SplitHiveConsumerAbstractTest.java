@@ -8,7 +8,7 @@ import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class SplitHiveConsumerTest {
+class SplitHiveConsumerAbstractTest {
 
     private static BeesBatches createBeesBatches(int x, int e) {
         BeesBatches beesBatches = new BeesBatches();
@@ -41,7 +41,7 @@ class SplitHiveConsumerTest {
     void testSplitHiveWithNoValidHiveId() {
 
         Hives hives = new Hives();
-        SplitHiveConsumer splitHiveConsumer = new SplitHiveConsumer();
+        SplitHiveConsumerAbstract splitHiveConsumer = new SplitHiveConsumerAbstract();
         splitHiveConsumer.accept(hives, Collections.emptyList());
         assertEquals(0, hives.getHives().size(), "Hives should remain empty when no valid IDs are provided.");
 

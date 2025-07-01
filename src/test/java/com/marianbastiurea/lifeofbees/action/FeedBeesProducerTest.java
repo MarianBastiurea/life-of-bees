@@ -12,7 +12,7 @@ class FeedBeesProducerTest {
 
     @Test
     void cantFeedBeesIfMonthIsNotSeptember() {
-        Optional<Boolean> result = new FeedBeesProducer().produce(
+        Optional<Boolean> result = new FeedBeesProducerAbstract().produce(
                 new BeeTime(2023, 8, 22)
         );
         assertTrue(result.isEmpty(), "Month is not September");
@@ -21,7 +21,7 @@ class FeedBeesProducerTest {
 
     @Test
     void canFeedBeesIfMonthSeptember() {
-        Optional<Boolean> result = new FeedBeesProducer().produce(
+        Optional<Boolean> result = new FeedBeesProducerAbstract().produce(
                 new BeeTime(2023, 9, 22) // September
         );
         assertEquals(Optional.of(true), result, "Month is September");

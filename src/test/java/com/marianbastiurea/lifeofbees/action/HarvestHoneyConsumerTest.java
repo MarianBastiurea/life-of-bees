@@ -15,7 +15,7 @@ class HarvestHoneyConsumerTest {
 
     @Test
     void createFirstHoneyBatch() {
-        HarvestHoneyConsumer harvestHoneyConsumer = new HarvestHoneyConsumer();
+        HarvestHoneyConsumerAbstract harvestHoneyConsumer = new HarvestHoneyConsumerAbstract();
 
         HoneyFrames beforeHarvestingHoneyFrames = new HoneyFrames(List.of(
                 new HoneyFrame(4.0)));
@@ -35,7 +35,7 @@ class HarvestHoneyConsumerTest {
 
     @Test
     void addSecondHoneyBatchSameHoneyType() {
-        HarvestHoneyConsumer harvestHoneyConsumer = new HarvestHoneyConsumer();
+        HarvestHoneyConsumerAbstract harvestHoneyConsumer = new HarvestHoneyConsumerAbstract();
 
         HoneyFrames beforeHarvestingHoneyFrames = new HoneyFrames(Arrays.asList(
                 new HoneyFrame(3.0), new HoneyFrame(4.5), new HoneyFrame(3.8),
@@ -63,7 +63,7 @@ class HarvestHoneyConsumerTest {
 
     @Test
     void addSecondHoneyBatchDifferentHoneyType() {
-        HarvestHoneyConsumer harvestHoneyConsumer = new HarvestHoneyConsumer();
+        HarvestHoneyConsumerAbstract harvestHoneyConsumer = new HarvestHoneyConsumerAbstract();
 
         HoneyFrames beforeHarvestingHoneyFrames = new HoneyFrames(Arrays.asList(
                 new HoneyFrame(3.0), new HoneyFrame(4.5), new HoneyFrame(3.8),
