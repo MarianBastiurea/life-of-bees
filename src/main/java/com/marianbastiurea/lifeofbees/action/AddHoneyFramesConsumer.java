@@ -5,7 +5,7 @@ import com.marianbastiurea.lifeofbees.bees.Hives;
 
 import java.util.List;
 
-public class AddHoneyFramesConsumer extends WeeklyConsumerAbstract<List<Integer>> {
+public class AddHoneyFramesConsumer extends HiveConsumer<List<Integer>> {
 
 
     @Override

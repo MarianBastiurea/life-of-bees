@@ -5,7 +5,7 @@ import com.marianbastiurea.lifeofbees.time.BeeTime;
 import java.util.Optional;
 
 
-public class InsectControlProducer extends WeeklyProducerAbstract<Boolean> {
+public class InsectControlProducer extends BeeTimeProducer<Boolean> {
 
     @Override
     public Optional<Boolean> produce(BeeTime beeTime) {

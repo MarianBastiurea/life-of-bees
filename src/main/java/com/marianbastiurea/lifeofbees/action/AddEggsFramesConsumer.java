@@ -6,7 +6,7 @@ import com.marianbastiurea.lifeofbees.bees.Hives;
 import java.util.List;
 
 
-public class AddEggsFramesConsumer extends WeeklyConsumerAbstract<List<Integer>> {
+public class AddEggsFramesConsumer extends HiveConsumer<List<Integer>> {
 
     @Override
     public void accept(Hives hives, List<Integer> eggHiveIds) {
