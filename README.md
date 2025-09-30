@@ -7,5 +7,6 @@ and feed your bees to prepare them for winter. Try it now and become a successfu
 This game is built with Java 23, Spring Boot, and MongoDB for the backend,
 while the frontend uses React and Bootstrap.
 
-This game can be found at lifeofbees.co.uk.
+The live version of this game is available at [lifeofbees.co.uk](https://lifeofbees.co.uk).
+
 
