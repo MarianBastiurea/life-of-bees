@@ -192,7 +192,7 @@ public class Hives {
             logger.debug("Creating hive with id = {}", i);
             BeesBatches beesBatches = new BeesBatches(
                     IntStream.range(0, DAYS_TO_LIVE_FOR_A_BEE)
-                            .mapToObj(_ -> randomParameters.numberOfBees())
+                            .mapToObj(key-> randomParameters.numberOfBees())
                             .collect(Collectors.toCollection(LinkedList::new))
             );
             Hive hive = new Hive(
