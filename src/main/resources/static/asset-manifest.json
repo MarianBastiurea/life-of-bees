@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/static/css/main.40994f32.css",
+    "main.js": "/static/js/main.3652b9e5.js",
+    "static/js/453.8dfc8cb4.chunk.js": "/static/js/453.8dfc8cb4.chunk.js",
+    "static/media/rapeseed-flower.jpg": "/static/media/rapeseed-flower.75435d609ea6b8756fe9.jpg",
+    "static/media/linden-flower.jpg": "/static/media/linden-flower.10ef38ed4c7236bdf6b6.jpg",
+    "static/media/sun-flower.jpg": "/static/media/sun-flower.bd78156c2ca099f9a882.jpg",
+    "static/media/HappyBees.jpg": "/static/media/HappyBees.d5000e9b0e26174cf9c8.jpg",
+    "static/media/wild-flower.jpg": "/static/media/wild-flower.c8170f89a559dcebe2b0.jpg",
+    "static/media/false-indigo-flower.jpg": "/static/media/false-indigo-flower.0272042d09d0e8b671e7.jpg",
+    "static/media/acacia-flower.jpg": "/static/media/acacia-flower.9489079c7118fbc92c1a.jpg",
+    "index.html": "/index.html",
+    "main.40994f32.css.map": "/static/css/main.40994f32.css.map",
+    "main.3652b9e5.js.map": "/static/js/main.3652b9e5.js.map",
+    "453.8dfc8cb4.chunk.js.map": "/static/js/453.8dfc8cb4.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.40994f32.css",
+    "static/js/main.3652b9e5.js"
+  ]
+}

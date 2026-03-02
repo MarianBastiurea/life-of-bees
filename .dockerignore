@@ -1,0 +1,6 @@
+.git
+target
+node_modules
+frontend/bees-app/node_modules
+frontend/bees-app/build
+.DS_Store
