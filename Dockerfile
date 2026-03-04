@@ -3,9 +3,8 @@ FROM maven:3.9.9-eclipse-temurin-23 AS build
 
 WORKDIR /app
 
-# Copiem doar codul Java și fișierele necesare Maven
-COPY pom.xml .
-COPY src ./src
+# Copiem tot proiectul
+COPY . .
 
 # Construim backend-ul
 RUN mvn clean package -DskipTests
